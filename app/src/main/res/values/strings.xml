@@ -7,4 +7,5 @@
     <string name="connexion_placeholder_mdp">Mot de passe</string>
 
     <string name="connexion_button">Connexion</string>
+    <string name="lien_api">http://localhost/testAPISAE/API/%s</string>
 </resources>
