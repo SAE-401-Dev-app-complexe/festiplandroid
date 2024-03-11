@@ -18,7 +18,7 @@
 
     <TableRow android:layout_marginBottom="@dimen/marge_inputs">
         <EditText
-            android:id="@+id/connexion_email"
+            android:id="@+id/connexion_pseudo"
             style="@style/connexion_champs"
             android:inputType="text"
             android:hint="@string/connexion_placeholder_pseudo" />
@@ -26,7 +26,7 @@
 
     <TableRow android:layout_marginBottom="@dimen/marge_bouton">
         <EditText
-            android:id="@+id/connexion_mot_de_passe"
+            android:id="@+id/connexion_mdp"
             style="@style/connexion_champs"
             android:inputType="textPassword"
             android:hint="@string/connexion_placeholder_mdp" />

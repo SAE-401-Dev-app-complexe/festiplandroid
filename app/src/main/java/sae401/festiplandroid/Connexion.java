@@ -2,20 +2,14 @@ package sae401.festiplandroid;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -23,7 +17,7 @@ public class Connexion extends AppCompatActivity {
 
     private TextView connexionErreur;
 
-    private EditText utilisateur;
+    private EditText pseudo;
 
     private EditText motDePasse;
 
@@ -33,8 +27,8 @@ public class Connexion extends AppCompatActivity {
         setContentView(R.layout.connexion);
 
         connexionErreur = findViewById(R.id.connexion_erreur);
-        utilisateur = findViewById(R.id.user);
-        motDePasse = findViewById(R.id.mdp);
+        pseudo = findViewById(R.id.connexion_pseudo);
+        motDePasse = findViewById(R.id.connexion_mdp);
     }
 
     @Override
@@ -52,14 +46,16 @@ public class Connexion extends AppCompatActivity {
     }
 
     public void clicConnexion(View vue) throws UnsupportedEncodingException {
-        String motDePasse = motDePasse.getText().toString();
-        String login = utilisateur.getText().toString();
-        
-        motDePasse = URLEncoder.encode(motDePasse , "UTF-8");
+        String login = pseudo.getText().toString();
+        String mdp = motDePasse.getText().toString();
+
         login = URLEncoder.encode(login , "UTF-8");
+        mdp = URLEncoder.encode(mdp , "UTF-8");
 
         String url = String.format(getString(R.string.lien_api),
-                "/authentification/" + login + "/" + motDePasse);
+                "/authentification/" + login + "/" + mdp);
+
+        // TODO passer données dans le contenu de la requête POST
 
         if (true) {
             connexionErreur.setVisibility(View.VISIBLE);
