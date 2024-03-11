@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:orientation="vertical"
+    android:stretchColumns="4"
+    tools:context=".Connexion">
+
+    <TextView
+        android:id="@+id/connexion_erreur"
+        android:layout_marginTop="@dimen/connexion_separation_haut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/red"
+        android:visibility="invisible"
+        android:layout_gravity="center"
+        android:text="@string/connexion_erreur_connexion"
+        />
+    <TableRow android:layout_marginStart="20sp">
+
+        <EditText
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_width="wrap_content"
+            android:paddingRight="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/gray"
+            android:hint="@string/connexion_placeholder_nom"
+            android:textColorHint="@color/black"
+            android:textSize="17sp" />
+        <TextView
+            android:layout_height="match_parent"
+            android:layout_width="40dp"
+            android:paddingRight="10dp"
+            android:background="@color/whiter_gray"
+            />
+
+    </TableRow>
+    <TableRow
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="20dp">
+
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/gray"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:hint="@string/connexion_placeholder_mdp"
+            android:paddingRight="150dp"
+            android:textColorHint="@color/black"
+            android:textSize="17sp" />
+        <TextView
+            android:layout_height="match_parent"
+
+            android:layout_width="40dp"
+            android:paddingRight="10dp"
+            android:background="@color/whiter_gray"
+            />
+    </TableRow>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="100dp"
+        android:backgroundTint="@color/blue"
+
+        android:scaleY="2"
+        android:text="@string/connexion_button"
+        android:onClick="connexion"/>
+
+</TableLayout>

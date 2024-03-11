@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">FestiplAndroid</string>
+    <string name="connexion_placeholder_nom">   Nom d\'utilisateur</string>
+    <string name="connexion_placeholder_mdp">   Mot de passe</string>
+    <string name="connexion_erreur_connexion">Identifiant ou mot de passe incorrecte</string>
+    <string name="connexion_button">Connexion</string>
+</resources>
