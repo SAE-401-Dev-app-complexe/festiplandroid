@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- Style du message d'erreur -->
+    <style name="connexion_erreur">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_span">4</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/connexion_texte_input</item>
+        <item name="android:textColor">@color/red</item>
+    </style>
+
+    <!-- Style des textes pour les champs de saisie -->
+    <style name="connexion_champs">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_span">4</item>
+        <item name="android:paddingLeft">@dimen/padding_placeholder_inputs</item>
+        <item name="android:ems">15</item>
+        <item name="android:textColorHint">@color/connexion_texte_input</item>
+        <item name="android:background">@drawable/rounded_edittext</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/connexion_texte_input</item>
+    </style>
+
+    <!-- Style du bouton de connexion -->
+    <style name="connexion_bouton" >
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:backgroundTint">@color/fond_bouton</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:ems">7</item>
+        <item name="android:layout_span">4</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/connexion_texte_bouton</item>
+    </style>
+</resources>

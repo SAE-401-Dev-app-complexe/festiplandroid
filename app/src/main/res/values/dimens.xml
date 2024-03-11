@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="connexion_separation_haut">200dp</dimen>
+    <!-- MARGES -->
+    <dimen name="padding_page">20dp</dimen>
+    <dimen name="marge_erreur">50dp</dimen>
+    <dimen name="marge_inputs">15dp</dimen>
+    <dimen name="padding_placeholder_inputs">12dp</dimen>
+    <dimen name="marge_bouton">50dp</dimen>
+
+    <!-- TEXTES -->
+    <dimen name="connexion_texte_input">20sp</dimen>
+    <dimen name="connexion_texte_bouton">20sp</dimen>
+
+    <!-- TAILLES -->
+    <dimen name="connexion_taille_bouton">40dp</dimen>
+    <dimen name="connexion_arrondi_bouton">10dp</dimen>
 </resources>

@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FF0000</color>
-    <color name="gray">#C6C6C6</color>
+    <color name="grey">#C6C6C6</color>
     <color name="blue">#008DF8</color>
-    <color name="whiter_gray">#E6E6E6</color>
+    <color name="whiter_grey">#E6E6E6</color>
+
+    <!-- CONNEXION -->
+    <color name="connexion_texte_input">#636363</color>
+    <color name="connexion_fond_input">#C8C8C8</color>
+    <color name="fond_bouton">#0080FF</color>
 </resources>
