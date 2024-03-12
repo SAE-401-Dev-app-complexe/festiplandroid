@@ -34,7 +34,7 @@ public class Connexion extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         new MenuInflater(this).inflate(R.menu.menu_navigation, menu);
-
+        menu.getItem(1).setIcon(R.drawable.ic_accueil);
         return super.onCreateOptionsMenu(menu);
     }
 
