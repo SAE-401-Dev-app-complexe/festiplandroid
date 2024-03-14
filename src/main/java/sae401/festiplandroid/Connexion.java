@@ -25,8 +25,6 @@ public class Connexion extends AppCompatActivity {
 
     private EditText motDePasse;
 
-    private ActivityResultLauncher<Intent> lanceurActiviteFille;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,9 +34,7 @@ public class Connexion extends AppCompatActivity {
         pseudo = findViewById(R.id.connexion_pseudo);
         motDePasse = findViewById(R.id.connexion_mdp);
 
-        lanceurActiviteFille = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                this::deconnexion);
+
     }
 
     public void clicConnexion(View vue) throws UnsupportedEncodingException {
@@ -59,11 +55,8 @@ public class Connexion extends AppCompatActivity {
             Intent pageFestivals = new Intent(this, Festivals.class);
 
             startActivity(pageFestivals); // TODO choisir avec communication ou sans
-            //lanceurActiviteFille.launch(pageFestivals);
+
         }
     }
 
-    public void deconnexion(ActivityResult result){
-
-    }
 }
