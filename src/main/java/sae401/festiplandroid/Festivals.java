@@ -2,6 +2,7 @@ package sae401.festiplandroid;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,10 +24,14 @@ public class Festivals extends AppCompatActivity implements
     private ArrayAdapter<String> adaptateurFestivals;
     private ListView listeFestivals;
 
-    private enum TYPE_FESTIVALS{
-        PROGRAMMES("Programmes"),
-        FAVORIS("Favoris");
+    public enum TYPE_FESTIVALS {
+        ;
+
+        public static final String PROGRAMMES = "Programmes";
+
+        public static final String FAVORIS = "Favoris";
     }
+
     private ActivityResultLauncher<Intent> lanceurFestivalsDetails;
     private  int[] idFestivals;
 
@@ -88,10 +93,10 @@ public class Festivals extends AppCompatActivity implements
         int optionChoisi = item.getItemId();
         if(R.id.festivals_programmes == optionChoisi) {
             chargerFestivalsProgrammes();
-            typeFestivals = "Programmes";
+            typeFestivals = TYPE_FESTIVALS.PROGRAMMES;
         } else if(R.id.festivals_favoris == optionChoisi) {
             chargerFestivalsFavoris();
-            typeFestivals = "Favoris";
+            typeFestivals = TYPE_FESTIVALS.FAVORIS;
         }
 
         return super.onOptionsItemSelected(item);
@@ -100,6 +105,7 @@ public class Festivals extends AppCompatActivity implements
     private void chargerFestivals() {
         if (typeFestivals.equals("Programmes")) {
             chargerFestivalsProgrammes();
+
         } else if(typeFestivals.equals("Favoris")) {
             chargerFestivalsFavoris();
         }
