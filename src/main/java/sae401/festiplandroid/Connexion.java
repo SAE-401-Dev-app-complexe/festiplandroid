@@ -1,7 +1,11 @@
 package sae401.festiplandroid;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +25,8 @@ public class Connexion extends AppCompatActivity {
 
     private EditText motDePasse;
 
+    private ActivityResultLauncher<Intent> lanceurActiviteFille;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,20 +35,10 @@ public class Connexion extends AppCompatActivity {
         connexionErreur = findViewById(R.id.connexion_erreur);
         pseudo = findViewById(R.id.connexion_pseudo);
         motDePasse = findViewById(R.id.connexion_mdp);
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        new MenuInflater(this).inflate(R.menu.menu_navigation, menu);
-        menu.getItem(1).setIcon(R.drawable.ic_accueil);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int idItem = item.getItemId();
-
-        return super.onOptionsItemSelected(item);
+        lanceurActiviteFille = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                this::deconnexion);
     }
 
     public void clicConnexion(View vue) throws UnsupportedEncodingException {
@@ -57,8 +53,17 @@ public class Connexion extends AppCompatActivity {
 
         // TODO passer données dans le contenu de la requête POST
 
-        if (true) {
+        if (false) {
             connexionErreur.setVisibility(View.VISIBLE);
+        } else {
+            Intent pageFestivals = new Intent(this, Festivals.class);
+
+            startActivity(pageFestivals); // TODO choisir avec communication ou sans
+            //lanceurActiviteFille.launch(pageFestivals);
         }
+    }
+
+    public void deconnexion(ActivityResult result){
+
     }
 }

@@ -13,4 +13,10 @@
             android:id="@+id/test2" />
     </TableRow>
 
+    <Button
+        android:text=""
+        android:onClick="AfficherDetails"
+        />
+
+
 </TableLayout>

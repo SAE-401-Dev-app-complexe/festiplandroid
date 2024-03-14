@@ -20,6 +20,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Festivals"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.FESTIVALS" />
+                <category android:name="android.intent.category.EXPAND" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".DetailsFestival"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.DETAILSFESTIVAL" />
+                <category android:name="android.intent.category.EXPAND" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -2,25 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/accueil"
-        app:showAsAction="ifRoom|withText"
-        android:icon="@drawable/ic_accueil"
-        android:title="Accueil" />
+        android:id="@+id/festivals_programmes"
+        android:title="Festivals programmés" />
     <item
-        android:id="@+id/festivals"
-        android:title="Festivals"
-        android:icon="@drawable/ic_festival" />
-    <item
-        android:title="test"
-        android:icon="@mipmap/ic_launcher"
-        app:showAsAction="ifRoom">
-        <menu>
-            <item
-                android:id="@+id/action1"
-                android:orderInCategory="100"
-                android:title="test"
-                android:icon="@mipmap/ic_launcher"
-                app:showAsAction="never" />
-        </menu>
-    </item>
+        android:id="@+id/festivals_favoris"
+        android:title="Festivals favoris" />
 </menu>
