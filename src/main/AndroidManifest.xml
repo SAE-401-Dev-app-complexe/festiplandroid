@@ -8,7 +8,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/logo_blanc"
+        android:roundIcon="@mipmap/ic_festiplan_blanc"
         android:supportsRtl="true"
         android:theme="@style/Theme.FestiplAndroid"
         tools:targetApi="31">
@@ -17,7 +17,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
