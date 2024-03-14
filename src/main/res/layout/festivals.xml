@@ -14,9 +14,8 @@
     </TableRow>
 
     <Button
-        android:text=""
-        android:onClick="AfficherDetails"
-        />
+        android:text="test"
+        android:onClick="AfficherDetails" />
 
 
 </TableLayout>

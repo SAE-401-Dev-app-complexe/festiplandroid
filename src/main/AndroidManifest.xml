@@ -13,21 +13,21 @@
         android:theme="@style/Theme.FestiplAndroid"
         tools:targetApi="31">
         <activity
-            android:name=".Connexion"
+            android:name=".Festivals"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
+        <!--activity
             android:name=".Festivals"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.FESTIVALS" />
                 <category android:name="android.intent.category.EXPAND" />
             </intent-filter>
-        </activity>
+        </activity>-->
         <activity
             android:name=".DetailsFestival"
             android:exported="true">

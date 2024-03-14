@@ -1,7 +1,7 @@
 package sae401.festiplandroid;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -19,13 +19,18 @@ public class Festivals extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.festivals);
 
+        ActionBar barre = getSupportActionBar();
+
+        barre.setDisplayShowTitleEnabled(false);
+        barre.setDisplayShowCustomEnabled(true);
+
+        barre.setCustomView(R.layout.action_bar);
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         new MenuInflater(this).inflate(R.menu.menu_navigation, menu);
-        menu.getItem(1).setIcon(R.drawable.ic_accueil);
         return super.onCreateOptionsMenu(menu);
     }
 
