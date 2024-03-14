@@ -3,6 +3,7 @@ package sae401.festiplandroid;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -34,7 +35,12 @@ public class Connexion extends AppCompatActivity {
         pseudo = findViewById(R.id.connexion_pseudo);
         motDePasse = findViewById(R.id.connexion_mdp);
 
+        ActionBar barre = getSupportActionBar();
 
+        barre.setDisplayShowTitleEnabled(false);
+        barre.setDisplayShowCustomEnabled(true);
+        barre.setCustomView(R.layout.action_bar);
+        barre.setBackgroundDrawable(getResources().getDrawable(R.drawable.fond_barre_action));
     }
 
     public void clicConnexion(View vue) throws UnsupportedEncodingException {
@@ -49,7 +55,7 @@ public class Connexion extends AppCompatActivity {
 
         // TODO passer données dans le contenu de la requête POST
 
-        if (false) {
+        if (login == null || mdp == null || login.isEmpty() || mdp.isEmpty()) {
             connexionErreur.setVisibility(View.VISIBLE);
         } else {
             Intent pageFestivals = new Intent(this, Festivals.class);

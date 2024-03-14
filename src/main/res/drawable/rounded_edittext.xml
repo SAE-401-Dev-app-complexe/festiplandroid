@@ -6,8 +6,8 @@
 
     <solid android:color="@color/connexion_fond_input" />
     <corners
-        android:bottomRightRadius="@dimen/connexion_arrondi_bouton"
-        android:bottomLeftRadius="@dimen/connexion_arrondi_bouton"
-        android:topLeftRadius="@dimen/connexion_arrondi_bouton"
-        android:topRightRadius="@dimen/connexion_arrondi_bouton" />
+        android:bottomRightRadius="@dimen/connexion_arrondi_champs"
+        android:bottomLeftRadius="@dimen/connexion_arrondi_champs"
+        android:topLeftRadius="@dimen/connexion_arrondi_champs"
+        android:topRightRadius="@dimen/connexion_arrondi_champs" />
 </shape>

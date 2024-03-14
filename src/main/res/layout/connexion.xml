@@ -8,15 +8,6 @@
     android:stretchColumns="*"
     tools:context=".Connexion">
 
-    <!-- personnalistion barre d'outils en haut avec image -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/grey"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
     <TableRow android:layout_marginVertical="@dimen/marge_erreur">
         <TextView
             android:id="@+id/connexion_erreur"
@@ -30,6 +21,7 @@
             android:id="@+id/connexion_pseudo"
             style="@style/connexion_champs"
             android:inputType="text"
+            android:autofillHints="username"
             android:hint="@string/connexion_placeholder_pseudo" />
     </TableRow>
 
@@ -38,6 +30,7 @@
             android:id="@+id/connexion_mdp"
             style="@style/connexion_champs"
             android:inputType="textPassword"
+            android:autofillHints="password"
             android:hint="@string/connexion_placeholder_mdp" />
     </TableRow>
 

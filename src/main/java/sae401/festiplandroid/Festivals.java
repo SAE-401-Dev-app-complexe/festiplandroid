@@ -17,27 +17,29 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-
 public class Festivals extends AppCompatActivity implements
         AdapterView.OnItemClickListener {
 
     private ArrayAdapter<String> adaptateurFestivals;
+
     private ListView listeFestivals;
 
-    public enum TYPE_FESTIVALS {
-        ;
-
+    public enum TYPE_FESTIVALS {;
         public static final String PROGRAMMES = "Programmes";
 
         public static final String FAVORIS = "Favoris";
+
+        public static final String DECONNEXION = "Deconnexion";
     }
 
     private ActivityResultLauncher<Intent> lanceurFestivalsDetails;
+
     private  int[] idFestivals;
 
     private int page;
 
     private String typeFestivals;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,8 +49,8 @@ public class Festivals extends AppCompatActivity implements
 
         barre.setDisplayShowTitleEnabled(false);
         barre.setDisplayShowCustomEnabled(true);
-
         barre.setCustomView(R.layout.action_bar);
+        barre.setBackgroundDrawable(getResources().getDrawable(R.drawable.fond_barre_action));
         
         listeFestivals = findViewById(R.id.listeFestivals);
         adaptateurFestivals = new ArrayAdapter<>(this,
@@ -78,9 +80,9 @@ public class Festivals extends AppCompatActivity implements
         pageDetails.putExtra("idFestival",idFestival);
         pageDetails.putExtra("typeFestival",typeFestivals);
         pageDetails.putExtra("page",page);
+
         lanceurFestivalsDetails.launch(pageDetails);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -90,13 +92,17 @@ public class Festivals extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int optionChoisi = item.getItemId();
-        if(R.id.festivals_programmes == optionChoisi) {
+        int optionChoisie = item.getItemId();
+
+        if (optionChoisie == R.id.festivals_programmes) {
             chargerFestivalsProgrammes();
             typeFestivals = TYPE_FESTIVALS.PROGRAMMES;
-        } else if(R.id.festivals_favoris == optionChoisi) {
+        } else if (optionChoisie == R.id.festivals_favoris) {
             chargerFestivalsFavoris();
             typeFestivals = TYPE_FESTIVALS.FAVORIS;
+        } else if (optionChoisie == R.id.deconnexion) {
+            deconnecter();
+            typeFestivals = TYPE_FESTIVALS.DECONNEXION;
         }
 
         return super.onOptionsItemSelected(item);
@@ -124,9 +130,18 @@ public class Festivals extends AppCompatActivity implements
         adaptateurFestivals.add("f4");
     }
 
+    /**
+     * Deconnecte l'utilisateur et le redirige vers la page de connexion.
+     */
+    private void deconnecter() {
+        Intent pageConnexion = new Intent(this, Connexion.class);
+        startActivity(pageConnexion);
+    }
+
     private void viderAdapdateur() {
         adaptateurFestivals.clear();
     }
+
     private void retourDetails(ActivityResult resultat) {
         if(resultat.getResultCode() == Activity.RESULT_OK) {
             //TODO Provoque une erreur

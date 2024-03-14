@@ -8,12 +8,6 @@
     android:stretchColumns="*"
     tools:context=".Festivals">
 
-
-    <TableRow >
-        <TextView
-            android:id="@+id/test2" />
-    </TableRow>
-
     <ListView
         android:id="@+id/listeFestivals"
         android:layout_width="match_parent"

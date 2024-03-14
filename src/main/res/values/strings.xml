@@ -8,4 +8,7 @@
 
     <string name="connexion_button">Connexion</string>
     <string name="lien_api">http://localhost/testAPISAE/API/%s</string>
+
+    <string name="menu_festivals_programmes">Festivals programmés</string>
+    <string name="menu_festivals_favoris">Festivals favoris</string>
 </resources>

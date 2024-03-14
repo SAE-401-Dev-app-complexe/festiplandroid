@@ -12,6 +12,6 @@
     <dimen name="connexion_texte_bouton">20sp</dimen>
 
     <!-- TAILLES -->
-    <dimen name="connexion_taille_bouton">40dp</dimen>
-    <dimen name="connexion_arrondi_bouton">10dp</dimen>
+    <dimen name="connexion_arrondi_champs">8dp</dimen>
+    <dimen name="connexion_largeur_champs">50dp</dimen>
 </resources>
