@@ -1,19 +1,21 @@
 package sae401.festiplandroid;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -57,12 +59,31 @@ public class Connexion extends AppCompatActivity {
 
         if (login == null || mdp == null || login.isEmpty() || mdp.isEmpty()) {
             connexionErreur.setVisibility(View.VISIBLE);
+            connexionErreur.setText(R.string.connexion_erreur_connexion);
         } else {
-            Intent pageFestivals = new Intent(this, Festivals.class);
 
-            startActivity(pageFestivals); // TODO choisir avec communication ou sans
+            //TODO changer url à celle correcte
+            ApiManager.appelApiGet("https://geo.api.gouv.fr/regions",this,new ListenerApi() {
 
+                @Override
+                public void onReponsePositive(JSONArray reponseApi) {
+                    // TODO modifier pour ajouter la verification de la reponse de l'api
+                    connexionReussi();
+                }
+
+                @Override
+                public void onReponseErreur(String erreur) {
+                    connexionErreur.setVisibility(View.VISIBLE);
+
+                    connexionErreur.setText(erreur);
+                }
+            });
         }
     }
 
+    private void connexionReussi() {
+        Intent pageFestivals = new Intent(this, Festivals.class);
+
+        startActivity(pageFestivals); // TODO choisir avec communication ou sans
+    }
 }
