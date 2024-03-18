@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">FestiplAndroid</string>
 
+    <string name="connexion_non_renseigne">Veuillez renseigner tous les champs</string>
     <string name="connexion_erreur_connexion">Identifiant ou mot de passe incorrect</string>
 
     <string name="connexion_placeholder_pseudo">Nom d\'utilisateur</string>
