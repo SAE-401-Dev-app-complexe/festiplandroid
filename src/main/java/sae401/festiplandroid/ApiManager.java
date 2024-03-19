@@ -7,26 +7,19 @@ package sae401.festiplandroid;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,7 +42,13 @@ public class ApiManager {
     = "La connexion à l'API a échoué !\nVeuillez vérifier votre connexion"
       + " internet ou réessayer plus tard.";
 
+    public final static String ERR_MAUVAISE_REQUETE
+    = "La requête à l'API est incorrecte !\nLes développeurs règleront ce soucis" +
+      " au plus vite.\nCode : %s\nDétails : %s";
+
     private static RequestQueue fileRequete;
+
+    private static String cleApi;
 
     /**
      * Récupère la file de requête pour les appels API.
@@ -64,41 +63,71 @@ public class ApiManager {
     }
 
     /**
-     * Appel à l'API en méthode GET.
+     * Appel à l'API dont l'url est passée en paramètre via une requête dont la
+     * méthode est passée en paramètre.
      *
-     * @param url L'url de l'API appelée.
+     * @param url L'url de l'API.
      * @param app L'activité appelante.
-     * @param reponseApi La réponse de l'API nécessaire pour la suite du programme.
+     * @param resultat L'interface de réponse à l'API.
+     * @param donnees Les données à envoyer à l'API.
+     * @param methode La méthode de la requête.
      */
     public static void appelApi(String url, AppCompatActivity app,
-                                   ListenerApi reponseApi, JSONObject donnees,int methode) {
+                                ListenerApi resultat, JSONObject donnees,
+                                int methode) {
         JsonObjectRequest requeteVolley;
 
         if (reseauDisponible(app)) {
-            requeteVolley = new JsonObjectRequest(methode, url,donnees,
-                     new Response.Listener<JSONObject>() {
+            requeteVolley = new JsonObjectRequest(methode, url, donnees,
+                reponse -> resultat.onReponsePositive(reponse),
+                erreur -> gestionErreur(erreur, resultat)
+            ) {
                 @Override
-                public void onResponse(JSONObject response) {
-                    reponseApi.onReponsePositive(response);
+                public Map<String, String> getHeaders() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    if (cleApi != null)
+                        params.put("APIKEY", cleApi);
+                    return params;
                 }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError erreur) {
-                    System.out.println(erreur);
-                    reponseApi.onReponseErreur(CONNEXION_ECHOUEE);
-                }
-            });
+            };
 
             requeteVolley.setRetryPolicy(new DefaultRetryPolicy(
-                    TIMEOUT_MS,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
+                TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
             getFileRequete(app).add(requeteVolley);
         } else {
-            reponseApi.onReponseErreur(AUCUNE_CONNEXION);
+            resultat.onReponseErreur(AUCUNE_CONNEXION);
         }
+    }
+
+    /**
+     * Gestion d'une erreur volley d'appel à l'API.
+     * @param erreur L'erreur volley.
+     * @param resultat L'interface de réponse à l'API.
+     */
+    private static void gestionErreur(VolleyError erreur, ListenerApi resultat) {
+        boolean erreurPrevue = false;
+        String messageErreur;
+
+        try {
+            String reponse = new String(erreur.networkResponse.data, "utf-8");
+            System.out.println("Erreur détectée : " + reponse);
+
+            JSONObject donnees = new JSONObject(reponse);
+
+            String error = donnees.getString("error");
+            String details = donnees.getString("details");
+
+            erreurPrevue = true;
+            messageErreur = String.format(ERR_MAUVAISE_REQUETE, error, details);
+
+            resultat.onReponseErreur(messageErreur);
+        } catch (Exception e) {}
+
+        if (!erreurPrevue)
+            resultat.onReponseErreur(CONNEXION_ECHOUEE);
     }
 
     /**
@@ -121,5 +150,13 @@ public class ApiManager {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    /**
+     * Définit la clé API pour les appels à l'API.
+     * @param cleApi La clé API.
+     */
+    public static void setCleApi(String cleApi) {
+        ApiManager.cleApi = cleApi;
     }
 }

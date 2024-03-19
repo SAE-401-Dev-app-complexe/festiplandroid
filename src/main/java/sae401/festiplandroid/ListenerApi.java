@@ -4,8 +4,6 @@
  */
 package sae401.festiplandroid;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -24,14 +22,6 @@ public interface ListenerApi {
      *
      * @param reponseApi L'éventuelle réponse de l'API.
      */
-    void onReponsePositive(String reponseApi);
-
-
-    /**
-     * Gestion d'une réponse positive de l'API.
-     *
-     * @param reponseApi L'éventuelle réponse de l'API.
-     */
     void onReponsePositive(JSONObject reponseApi) ;
 
     /**
@@ -39,5 +29,5 @@ public interface ListenerApi {
      *
      * @param erreur Le message d'erreur renvoyé par l'API.
      */
-    abstract void onReponseErreur(String erreur);
+    void onReponseErreur(String erreur);
 }
