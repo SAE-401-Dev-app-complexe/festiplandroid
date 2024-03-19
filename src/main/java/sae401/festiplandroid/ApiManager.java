@@ -7,9 +7,11 @@ package sae401.festiplandroid;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,9 +19,16 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Gestion de la logique des appels d'API.
@@ -61,20 +70,21 @@ public class ApiManager {
      * @param app L'activité appelante.
      * @param reponseApi La réponse de l'API nécessaire pour la suite du programme.
      */
-    public static void appelApiGet(String url, AppCompatActivity app,
-                                   ListenerApi reponseApi) {
-        JsonArrayRequest requeteVolley;
+    public static void appelApi(String url, AppCompatActivity app,
+                                   ListenerApi reponseApi, JSONObject donnees,int methode) {
+        JsonObjectRequest requeteVolley;
 
         if (reseauDisponible(app)) {
-            requeteVolley = new JsonArrayRequest(Request.Method.GET, url,
-                null, new Response.Listener<JSONArray>() {
+            requeteVolley = new JsonObjectRequest(methode, url,donnees,
+                     new Response.Listener<JSONObject>() {
                 @Override
-                public void onResponse(JSONArray response) {
+                public void onResponse(JSONObject response) {
                     reponseApi.onReponsePositive(response);
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError erreur) {
+                    System.out.println(erreur);
                     reponseApi.onReponseErreur(CONNEXION_ECHOUEE);
                 }
             });
@@ -83,6 +93,7 @@ public class ApiManager {
                     TIMEOUT_MS,
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
 
             getFileRequete(app).add(requeteVolley);
         } else {

@@ -13,7 +13,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -72,13 +76,16 @@ public class Connexion extends AppCompatActivity {
      * @param vue La vue actuelle.
      * @throws UnsupportedEncodingException Si l'encodage des données échoue.
      */
-    public void clicConnexion(View vue) throws UnsupportedEncodingException {
+    public void clicConnexion(View vue) throws UnsupportedEncodingException, JSONException {
         String login = pseudo.getText().toString();
         String mdp = motDePasse.getText().toString();
 
         login = URLEncoder.encode(login , "UTF-8");
         mdp = URLEncoder.encode(mdp , "UTF-8");
 
+        JSONObject donnees = new JSONObject();
+        donnees.put("login", login);
+        donnees.put("password", mdp);
         String url = String.format(getString(R.string.lien_api),
                 "/authentification/" + login + "/" + mdp);
 
@@ -90,21 +97,27 @@ public class Connexion extends AppCompatActivity {
         } else {
 
             //TODO changer url à celle correcte
-            ApiManager.appelApiGet("https://geo.api.gouv.fr/regions",
+            ApiManager.appelApi("http://10.2.1.20:80/API-main/testAPISAE/API/authentification",
                                    this, new ListenerApi() {
 
                 @Override
-                public void onReponsePositive(JSONArray reponseApi) {
+                public void onReponsePositive(String reponseApi) {
                     // TODO modifier pour ajouter la verification de la reponse de l'api
                     gestionConnexionReussie();
                 }
 
                 @Override
+                public void onReponsePositive(JSONObject reponseApi) {
+
+                }
+
+                        @Override
                 public void onReponseErreur(String erreur) {
+
                     connexionErreur.setVisibility(View.VISIBLE);
                     connexionErreur.setText(erreur);
                 }
-            });
+            },donnees, Request.Method.POST);
         }
     }
 
@@ -113,7 +126,7 @@ public class Connexion extends AppCompatActivity {
      */
     private void gestionConnexionReussie() {
         Intent pageFestivals = new Intent(this, Festivals.class);
-
+        
         startActivity(pageFestivals); // TODO choisir avec communication ou sans
     }
 }

@@ -5,6 +5,8 @@
 package sae401.festiplandroid;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Gère les résultats d'un appel d'api.
@@ -22,7 +24,15 @@ public interface ListenerApi {
      *
      * @param reponseApi L'éventuelle réponse de l'API.
      */
-    void onReponsePositive(JSONArray reponseApi);
+    void onReponsePositive(String reponseApi);
+
+
+    /**
+     * Gestion d'une réponse positive de l'API.
+     *
+     * @param reponseApi L'éventuelle réponse de l'API.
+     */
+    void onReponsePositive(JSONObject reponseApi) ;
 
     /**
      * Gestion d'une réponse négative de l'API.
