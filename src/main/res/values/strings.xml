@@ -8,7 +8,8 @@
     <string name="connexion_placeholder_mdp">Mot de passe</string>
 
     <string name="connexion_button">Connexion</string>
-    <string name="lien_api">http://10.0.2.2:80/API-main/testAPISAE/API/authentification%s</string>
+    <!-- ATTENTION : remplacer ip ci-dessous par IPV4 locale (ipconfig dans cmd) -->
+    <string name="lien_api">http://192.168.170.30/API/testAPISAE/API/</string>
 
     <string name="menu_festivals_programmes">Festivals programmés</string>
     <string name="menu_festivals_favoris">Festivals favoris</string>

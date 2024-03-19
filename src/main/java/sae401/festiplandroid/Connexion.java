@@ -75,58 +75,73 @@ public class Connexion extends AppCompatActivity {
      *
      * @param vue La vue actuelle.
      * @throws UnsupportedEncodingException Si l'encodage des données échoue.
+     * @throws JSONException Si la création du JSON échoue.
      */
     public void clicConnexion(View vue) throws UnsupportedEncodingException, JSONException {
         String login = pseudo.getText().toString();
         String mdp = motDePasse.getText().toString();
 
-        login = URLEncoder.encode(login , "UTF-8");
-        mdp = URLEncoder.encode(mdp , "UTF-8");
+        login = URLEncoder.encode(login, "UTF-8");
+        mdp = URLEncoder.encode(mdp, "UTF-8");
 
         JSONObject donnees = new JSONObject();
         donnees.put("login", login);
         donnees.put("password", mdp);
-        String url = String.format(getString(R.string.lien_api),
-                "/authentification/" + login + "/" + mdp);
 
-        // TODO passer données dans le contenu de la requête POST
+        String url = getString(R.string.lien_api) + "authentification";
 
         if (login.isEmpty() || mdp.isEmpty()) {
             connexionErreur.setVisibility(View.VISIBLE);
             connexionErreur.setText(R.string.connexion_non_renseigne);
         } else {
-
-            //TODO changer url à celle correcte
-            ApiManager.appelApi("http://10.2.1.20:80/API-main/testAPISAE/API/authentification",
-                                   this, new ListenerApi() {
-
-                @Override
-                public void onReponsePositive(String reponseApi) {
-                    // TODO modifier pour ajouter la verification de la reponse de l'api
-                    gestionConnexionReussie();
-                }
-
+            ApiManager.appelApi(url, this, new ListenerApi() {
                 @Override
                 public void onReponsePositive(JSONObject reponseApi) {
-
+                    String cleApi = null;
+                    try {
+                        cleApi = reponseApi.getString("cleApi");
+                    } catch (JSONException e) {
+                        gestionConnexionEchouee(null);
+                    } finally {
+                        if (cleApi.equals("null")) {
+                            gestionConnexionEchouee(null);
+                        } else {
+                            gestionConnexionReussie(cleApi);
+                        }
+                    }
                 }
 
-                        @Override
+                @Override
                 public void onReponseErreur(String erreur) {
-
-                    connexionErreur.setVisibility(View.VISIBLE);
-                    connexionErreur.setText(erreur);
+                    gestionConnexionEchouee(erreur);
                 }
-            },donnees, Request.Method.POST);
+            }, donnees, Request.Method.POST);
         }
     }
 
     /**
      * Si la connexion est réussie, redirige l'utilisateur vers la page principale.
+     * @param cleApi La clé API de l'utilisateur.
      */
-    private void gestionConnexionReussie() {
+    private void gestionConnexionReussie(String cleApi) {
+        ApiManager.setCleApi(cleApi);
+
         Intent pageFestivals = new Intent(this, Festivals.class);
         
-        startActivity(pageFestivals); // TODO choisir avec communication ou sans
+        startActivity(pageFestivals);
+    }
+
+    /**
+     * Si la connexion échoue, affiche un message d'erreur.
+     * @param erreur Le message d'erreur à afficher.
+     */
+    private void gestionConnexionEchouee(String erreur) {
+        connexionErreur.setVisibility(View.VISIBLE);
+        if (erreur == null) {
+            connexionErreur.setText(R.string.connexion_erreur_connexion);
+            motDePasse.setText("");
+        } else {
+            connexionErreur.setText(erreur);
+        }
     }
 }
