@@ -41,10 +41,7 @@ public class Festivals extends AppCompatActivity implements
 
     public enum TYPE_FESTIVALS {;
         public static final String PROGRAMMES = "Programmes";
-
         public static final String FAVORIS = "Favoris";
-
-        public static final String DECONNEXION = "Deconnexion";
     }
 
     private ActivityResultLauncher<Intent> lanceurFestivalsDetails;
@@ -98,7 +95,7 @@ public class Festivals extends AppCompatActivity implements
 
         // STUB
         page = 1;
-        typeFestivals = TYPE_FESTIVALS.PROGRAMMES;
+        typeFestivals = TYPE_FESTIVALS.PROGRAMMES; // TODO modifier par donnée envoyée pour pouvoir choisir entre favoris et programmés via menu en haut de page
         // FIN STUB
 
         festivalsStockes = new ArrayList<>();
@@ -129,7 +126,6 @@ public class Festivals extends AppCompatActivity implements
             typeFestivals = TYPE_FESTIVALS.FAVORIS;
         } else if (optionChoisie == R.id.deconnexion) {
             deconnecter();
-            typeFestivals = TYPE_FESTIVALS.DECONNEXION;
         }
 
         return super.onOptionsItemSelected(item);
@@ -141,6 +137,7 @@ public class Festivals extends AppCompatActivity implements
     private void deconnecter() {
         Intent pageConnexion = new Intent(this, Connexion.class);
         startActivity(pageConnexion);
+        // TODO faire en sorte qu'on ne puisse plus faire retour (via bouton tel) après la déconnexion
     }
 
     // Non nécessaires les informations sont gardés aprés changement de page
