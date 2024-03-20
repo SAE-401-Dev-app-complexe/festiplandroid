@@ -5,16 +5,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/padding_page"
-    android:stretchColumns="*"
     tools:context=".DetailsFestival">
 
     <TableRow>
         <TextView
-            android:id="@+id/test2" />
+            android:id="@+id/titre_festival"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="titre festival exemple"/>
     </TableRow>
 
-    <Button
-        android:onClick="retour"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    <TableRow>
+        <TextView
+            android:id="@+id/dates_festival"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="dates festival exemple"/>
+    </TableRow>
+
 </TableLayout>
