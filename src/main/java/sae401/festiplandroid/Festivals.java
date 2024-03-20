@@ -29,9 +29,9 @@ import java.util.ArrayList;
 public class Festivals extends AppCompatActivity implements
         AdapterView.OnItemClickListener {
 
-    private final String FESTIVAL_AJOUTE = "Festival ajouté aux favoris";
+    private final String FESTIVAL_AJOUTE = "Festival n°%d ajouté aux favoris";
 
-    private final String FESTIVAL_RETIRE = "Festival retiré des favoris";
+    private final String FESTIVAL_RETIRE = "Festival n°%d retiré des favoris";
 
     private final String URL_FESTIVAL_FAVORIS = "";
 
@@ -64,8 +64,6 @@ public class Festivals extends AppCompatActivity implements
      */
     private ArrayList<InfosFestival> listeFestivals;
 
-    private ImageButton boutonFavori;
-
     /**
      * Element permettant d'afficher la liste des festivals
      */
@@ -95,7 +93,7 @@ public class Festivals extends AppCompatActivity implements
          * l'affichage des instances de type InfosFestival en tant que item de la liste.
          * Cet adapatateur est associé au RecyclerView
          */
-        FestivalsAdapter adaptateur = new FestivalsAdapter(listeFestivals);
+        FestivalsAdapter adaptateur = new FestivalsAdapter(this, listeFestivals);
         festivalsRecyclerView.setAdapter(adaptateur);
 
         // STUB
@@ -193,6 +191,20 @@ public class Festivals extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Méthode appelée lors du clic sur un festival.
+     * @param vue La vue actuelle.
+     */
+    public void clicFestival(View vue) {
+        Intent pageDetails = new Intent(this, DetailsFestival.class);
+
+        int idFestival = (Integer) vue.getTag();
+
+        Toast.makeText(this, "Festival n°" + idFestival, Toast.LENGTH_SHORT).show();
+
+        pageDetails.putExtra("idFestival", idFestival);
+        lanceurFestivalsDetails.launch(pageDetails);
+    }
 
     /**
      * Méthode appelée lors du clic sur le bouton de favori.
@@ -201,21 +213,32 @@ public class Festivals extends AppCompatActivity implements
     public void clicFavori(View vue) {
         Drawable.ConstantState etoileActive;
 
+        String message;
+
+        ImageButton boutonFavori = (ImageButton) vue;
+
+        int idFestival = idFestival = (Integer) boutonFavori.getTag();
+
         etoileActive
         = getResources().getDrawable(R.drawable.etoile_active).getConstantState();
 
-        boutonFavori = (ImageButton) vue;
-
         // Si l'étoile est active, on la désactive
         if (boutonFavori.getDrawable().getConstantState().equals(etoileActive)) {
+            message = String.format(FESTIVAL_RETIRE, idFestival);
             boutonFavori.setImageResource(R.drawable.etoile_inactive);
-            Toast.makeText(this, FESTIVAL_RETIRE, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            // TODO appel API avec l'id du festival (pas besoin de la clé API qui désigne l'user car déjà stockée en statique dans ApiManager)
         } else {
+            message = String.format(FESTIVAL_AJOUTE, idFestival);
             boutonFavori.setImageResource(R.drawable.etoile_active);
-            Toast.makeText(this, FESTIVAL_AJOUTE, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            // TODO appel API avec l'id du festival (pas besoin de la clé API qui désigne l'user car déjà stockée en statique dans ApiManager)
         }
     }
 
+    /**
+     * Affiche les festivals de la page actuelle
+     */
     public void afficherPage()  {
         //viderListeFestivals();
         try {
@@ -226,11 +249,9 @@ public class Festivals extends AppCompatActivity implements
             for (int num = pageDebut; num < festivalsStockes.size() && num < pageFin; num++) {
                 System.out.println(festivalsStockes.get(num));
                 idFestivals.add(Integer.parseInt(festivalsStockes.get(num).getString("idFestival")));
-                listeFestivals.add(new InfosFestival(festivalsStockes.get(num).getString("titre"), R.drawable.default_illustration));
+                listeFestivals.add(new InfosFestival(festivalsStockes.get(num).getString("titre"), R.drawable.default_illustration, num));
             }
-        } catch (JSONException e) {
-
-        }
+        } catch (JSONException e) {}
     }
 
     /**
@@ -238,10 +259,13 @@ public class Festivals extends AppCompatActivity implements
      */
     private void initialiseListeFestivals() {
         listeFestivals = new ArrayList<>();
-        listeFestivals.add(new InfosFestival("Exemple festival numéro 1", R.drawable.default_illustration));
-        listeFestivals.add(new InfosFestival("aaaaaaaaaazzzzssxcvbn,;  bvcxszedfg", R.drawable.default_illustration));
+        listeFestivals.add(new InfosFestival("Exemple festival numéro 0", R.drawable.default_illustration, 0));
+        listeFestivals.add(new InfosFestival("Exemple festival numéro 1", R.drawable.default_illustration, 1));
     }
 
+    /**
+     * Méthode pour vider la liste des festivals
+     */
     private void viderListeFestivals() {
         listeFestivals.clear();
     }

@@ -5,6 +5,7 @@
 package sae401.festiplandroid;
 
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,6 +33,11 @@ public class FestivalsViewHolder extends RecyclerView.ViewHolder {
     private ImageView illustration;
 
     /**
+     * ImageButton qui permet de marquer un festival en favori
+     */
+    public ImageButton boutonFavori;
+
+    /**
      * Constructeur avec en argument une vue correspondant
      * à un item de la liste
      * Le constructeur permet d'initialiser les identifiants des
@@ -42,6 +48,7 @@ public class FestivalsViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         titre = (TextView) itemView.findViewById(R.id.titre);
         illustration = (ImageView) itemView.findViewById(R.id.illustration);
+        boutonFavori = (ImageButton) itemView.findViewById(R.id.bouton_favori);
     }
 
     /**
@@ -51,6 +58,6 @@ public class FestivalsViewHolder extends RecyclerView.ViewHolder {
      */
     public void bind(InfosFestival festival) {
         titre.setText(festival.getTitre());
-        illustration.setImageResource(festival.getGetIllustration());
+        illustration.setImageResource(festival.getIllustration());
     }
 }

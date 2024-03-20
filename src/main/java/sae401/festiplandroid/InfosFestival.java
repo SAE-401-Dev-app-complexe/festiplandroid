@@ -18,16 +18,19 @@ public class InfosFestival {
     private String titre;
 
     /** Identifiant de l'illustration, au sein des ressources de type Drawable */
-    private int getIllustration;
+    private int illustration;
+
+    private int idFestival;
 
     /**
      * Constructeur avec en argument les valeurs des 2 attributs
      * @param titre titre du festival
      * @param illustration identifiant de l'illustration du festival
      */
-    public InfosFestival(String titre, int illustration) {
+    public InfosFestival(String titre, int illustration, int idFestival) {
         this.titre = titre;
-        this.getIllustration = illustration;
+        this.illustration = illustration;
+        this.idFestival = idFestival;
     }
     /**
      * Renvoie le titre du festival
@@ -41,7 +44,11 @@ public class InfosFestival {
      * Renvoie l'identifiant de l'illustration du festival
      * @return un entier contenant l'identifiant du festival
      */
-    public int getGetIllustration() {
-        return getIllustration;
+    public int getIllustration() {
+        return illustration;
+    }
+
+    public int getIdFestival() {
+        return idFestival;
     }
 }

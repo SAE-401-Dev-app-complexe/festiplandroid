@@ -33,15 +33,15 @@
                 android:src="@drawable/default_illustration" />
         </TableRow>
 
-        <TableRow android:gravity="center" android:onClick="clicFavori">
+        <TableRow android:gravity="center">
             <ImageButton
+                android:id="@+id/bouton_favori"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:scaleType="centerInside"
                 android:background="?android:selectableItemBackground"
                 android:contentDescription="@string/festivals_description_image"
-                android:onClick="clicFavori"
                 android:src="@drawable/etoile_active" />
             <TextView
                 android:id="@+id/titre"

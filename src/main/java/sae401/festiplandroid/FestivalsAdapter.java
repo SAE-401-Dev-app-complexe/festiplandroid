@@ -4,6 +4,7 @@
  */
 package sae401.festiplandroid;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,12 @@ import java.util.List;
  * @author Simon Guiraud
  */
 public class FestivalsAdapter extends RecyclerView.Adapter<FestivalsViewHolder> {
+
+    /**
+     * Contexte de l'application
+     */
+    private Context context;
+
     /**
      * Source de données à afficher par la liste
      */
@@ -32,8 +39,9 @@ public class FestivalsAdapter extends RecyclerView.Adapter<FestivalsViewHolder> 
      * @param donnees liste contenant les instances de type
      * InfosFestival que l'adapteur sera chargé de gérer
      */
-    public FestivalsAdapter(List<InfosFestival> donnees) {
-        lesDonnees = donnees;
+    public FestivalsAdapter(Context context, List<InfosFestival> donnees) {
+        this.context = context;
+        this.lesDonnees = donnees;
     }
 
     /**
@@ -47,13 +55,33 @@ public class FestivalsAdapter extends RecyclerView.Adapter<FestivalsViewHolder> 
             viewGroup,false);
         return new FestivalsViewHolder(view);
     }
+
     /**
      * On remplit un item de la liste en fonction de sa position
      */
     @Override
     public void onBindViewHolder(FestivalsViewHolder myViewHolder, int position) {
+        // Récupérer l'objet InfosFestival correspondant à cette position
         InfosFestival myObject = lesDonnees.get(position);
+
+        // Lier les données à la vue holder
         myViewHolder.bind(myObject);
+
+        // Associer l'ID du festival au bouton favori
+        myViewHolder.boutonFavori.setTag(myObject.getIdFestival());
+
+        // Associer l'ID du festival à l'item
+        myViewHolder.itemView.setTag(myObject.getIdFestival());
+
+        // Définir un écouteur de clic sur le bouton favori
+        myViewHolder.boutonFavori.setOnClickListener(view -> {
+            ((Festivals) context).clicFavori(view);
+        });
+
+        // Définir un écouteur de clic sur l'item
+        myViewHolder.itemView.setOnClickListener(view -> {
+            ((Festivals) context).clicFestival(view);
+        });
     }
 
     /**
