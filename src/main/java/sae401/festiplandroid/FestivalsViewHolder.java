@@ -45,10 +45,13 @@ public class FestivalsViewHolder extends RecyclerView.ViewHolder {
      * @param itemView vue décrivant l'affichage d'un item de la liste
      */
     public FestivalsViewHolder(View itemView) {
+
         super(itemView);
+        System.out.println("new viewHolde");
         titre = (TextView) itemView.findViewById(R.id.titre);
         illustration = (ImageView) itemView.findViewById(R.id.illustration);
         boutonFavori = (ImageButton) itemView.findViewById(R.id.bouton_favori);
+
     }
 
     /**
@@ -57,7 +60,9 @@ public class FestivalsViewHolder extends RecyclerView.ViewHolder {
      * @param festival l'instance qui doit être affichée
      */
     public void bind(InfosFestival festival) {
+        System.out.println("vind");
         titre.setText(festival.getTitre());
         illustration.setImageResource(festival.getIllustration());
+
     }
 }

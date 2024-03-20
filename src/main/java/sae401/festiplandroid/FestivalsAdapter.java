@@ -50,6 +50,7 @@ public class FestivalsAdapter extends RecyclerView.Adapter<FestivalsViewHolder> 
      */
     @Override
     public FestivalsViewHolder onCreateViewHolder(ViewGroup viewGroup, int itemType) {
+        System.out.println("imtemtyê"+itemType);
         View view = LayoutInflater.from(
             viewGroup.getContext()).inflate(R.layout.item_liste,
             viewGroup,false);
@@ -61,6 +62,9 @@ public class FestivalsAdapter extends RecyclerView.Adapter<FestivalsViewHolder> 
      */
     @Override
     public void onBindViewHolder(FestivalsViewHolder myViewHolder, int position) {
+        System.out.println("binding");
+        System.out.println(position);
+
         // Récupérer l'objet InfosFestival correspondant à cette position
         InfosFestival myObject = lesDonnees.get(position);
 

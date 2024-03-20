@@ -18,16 +18,17 @@
             android:name=".Connexion"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.FESTIVAL" />
+                <category android:name="android.intent.category.EXPAND" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Festivals"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.FESTIVAL" />
-                <category android:name="android.intent.category.EXPAND" />
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
         </activity>
         <activity

@@ -21,6 +21,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,9 +36,11 @@ public class Festivals extends AppCompatActivity implements
 
     private final String FESTIVAL_RETIRE = "Festival n°%d retiré des favoris";
 
+    private FestivalsAdapter adaptateur;
+
     private final String URL_FESTIVAL_FAVORIS = "";
 
-    private final String URL_FESTIVAL_PROGRAMMES = "";
+    private final String URL_FESTIVAL_PROGRAMMES =  "http://10.0.2.2/API/testAPISAE/API/festival";
 
     private final int NOMBRE_FESTIVAL_PAGE = 3;
 
@@ -84,14 +89,15 @@ public class Festivals extends AppCompatActivity implements
 
         LinearLayoutManager gestionnaireLineaire = new LinearLayoutManager(this);
         festivalsRecyclerView.setLayoutManager(gestionnaireLineaire);
-
+        //festivalsRecyclerView.getLayoutManager().addView(R.);
         /*
          * On crée un adaptateur personnalisé et permettant de gérer spécifiquement
          * l'affichage des instances de type InfosFestival en tant que item de la liste.
          * Cet adapatateur est associé au RecyclerView
          */
-        FestivalsAdapter adaptateur = new FestivalsAdapter(this, listeFestivals);
+        adaptateur = new FestivalsAdapter(this, listeFestivals);
         festivalsRecyclerView.setAdapter(adaptateur);
+
 
         // STUB
         page = 1;
@@ -233,17 +239,26 @@ public class Festivals extends AppCompatActivity implements
      * Affiche les festivals de la page actuelle
      */
     public void afficherPage()  {
-        //viderListeFestivals();
+        listeFestivals.clear();
+        adaptateur.notifyDataSetChanged();
         try {
             int pageDebut = (page-1) * NOMBRE_FESTIVAL_PAGE ;
             int pageFin = pageDebut + NOMBRE_FESTIVAL_PAGE;
             idFestivals.clear();
-
+            System.out.println(festivalsStockes.size());
+            //listeFestivals.clear();
             for (int num = pageDebut; num < festivalsStockes.size() && num < pageFin; num++) {
                 System.out.println(festivalsStockes.get(num));
+                System.out.println(festivalsStockes.get(num).getString("titre"));
                 idFestivals.add(Integer.parseInt(festivalsStockes.get(num).getString("idFestival")));
-                listeFestivals.add(new InfosFestival(festivalsStockes.get(num).getString("titre"), R.drawable.default_illustration, num));
+                listeFestivals.add(new InfosFestival(festivalsStockes.get(num).getString("titre"), R.drawable.default_illustration, Integer.parseInt(festivalsStockes.get(num).getString("idFestival"))));
+
             }
+            System.out.println(listeFestivals.get(0).getTitre());
+            System.out.println(listeFestivals.size());
+            System.out.println(adaptateur.getItemCount());
+            System.out.println("sizeList"+listeFestivals.size());
+            System.out.println("nbItemList"+adaptateur.getItemCount());
         } catch (JSONException e) {}
     }
 
@@ -252,7 +267,7 @@ public class Festivals extends AppCompatActivity implements
      */
     private void initialiseListeFestivals() {
         listeFestivals = new ArrayList<>();
-        listeFestivals.add(new InfosFestival("Exemple festival numéro 0", R.drawable.default_illustration, 0));
+        listeFestivals.add(new InfosFestival("Exemple festival numér", R.drawable.default_illustration, 0));
         listeFestivals.add(new InfosFestival("Exemple festival numéro 1", R.drawable.default_illustration, 1));
     }
 
@@ -264,32 +279,33 @@ public class Festivals extends AppCompatActivity implements
     }
 
     private void chargerFestivalsProgrammes()  {
-        /*ApiManager.appelApi(URL_FESTIVAL_PROGRAMMES, this, new ListenerApi() {
-            @Override
-            public void onReponsePositive(String reponseApi) {
+        ApiManager.appelApiArray(URL_FESTIVAL_PROGRAMMES, this, new ListenerApi<JSONArray>() {
 
-            }
             @Override
-            public void onReponsePositive(JSONObject reponseApi)  {
+            public void onReponsePositive(JSONArray reponseApi)  {
+                listeFestivals.clear();
                 try {
                     festivalsStockes.clear();
-                    JSONArray festivals = reponseApi.getJSONArray("festivals");
+                    JSONArray festivals = reponseApi;
                     for (int i = 0; i < festivals.length(); i++) {
+
                         JSONObject festival = festivals.getJSONObject(i);
+                        System.out.println("onresponse"+festival);
                         festivalsStockes.add(festival);
                     }
+                    afficherPage();
                 }catch (JSONException e) {
 
                 }
+
             }
 
 
             @Override
             public void onReponseErreur(String erreur) {
-
             }
-        },null,Request.Method.GET);*/
-        afficherPage();
+        },null, Request.Method.GET);
+
     }
 
     private void chargerFestivalsFavoris() {
@@ -343,7 +359,4 @@ public class Festivals extends AppCompatActivity implements
         festivalsStockes.add(j4);
         afficherPage();
     }
-
-
-
 }

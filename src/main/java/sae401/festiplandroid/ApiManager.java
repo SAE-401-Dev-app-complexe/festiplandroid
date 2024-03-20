@@ -116,6 +116,7 @@ public class ApiManager {
     public static void appelApiArray(String url, AppCompatActivity app,
                                      ListenerApi resultat, JSONArray donnees,
                                      int methode) {
+        System.out.println(cleApi);
         JsonArrayRequest requeteVolley;
 
         if (reseauDisponible(app)) {
