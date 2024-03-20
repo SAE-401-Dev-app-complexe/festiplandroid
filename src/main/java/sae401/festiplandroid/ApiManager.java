@@ -18,6 +18,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -200,5 +201,9 @@ public class ApiManager {
      */
     public static void setCleApi(String cleApi) {
         ApiManager.cleApi = cleApi;
+    }
+
+    public static String getCle() {
+        return cleApi;
     }
 }

@@ -55,11 +55,13 @@ public class DetailsFestival extends AppCompatActivity  {
         } else if (optionChoisie == R.id.festivals_favoris) {
             chargerFestivalsProgrammes();
         } else if (optionChoisie == R.id.deconnexion) {
+            ApiManager.setCleApi(null);
             deconnecter();
         }
 
         return super.onOptionsItemSelected(item);
     }
+
 
     /**
      * Charge la page des festivals programmés.

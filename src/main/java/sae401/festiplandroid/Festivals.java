@@ -125,6 +125,7 @@ public class Festivals extends AppCompatActivity implements
             chargerFestivalsFavoris();
             typeFestivals = TYPE_FESTIVALS.FAVORIS;
         } else if (optionChoisie == R.id.deconnexion) {
+            ApiManager.setCleApi(null);
             deconnecter();
         }
 
@@ -164,12 +165,7 @@ public class Festivals extends AppCompatActivity implements
      * @param v le bouton appuyé
      */
     public void pageSuivante(View v){
-
-        System.out.println(page);
-        System.out.println(festivalsStockes.size());
-        System.out.println((float)festivalsStockes.size()/NOMBRE_FESTIVAL_PAGE);
         if(page < (int)Math.ceil((float)festivalsStockes.size()/NOMBRE_FESTIVAL_PAGE)) {
-            System.out.println(page);
             page +=1;
             afficherPage();
         }
@@ -181,9 +177,8 @@ public class Festivals extends AppCompatActivity implements
      * @param v le bouton appuyé
      */
     public void pagePrecedente(View v)  {
-        System.out.println(page);
         if(page > 1) {
-            System.out.println(page);page -=1;
+            page -=1;
             afficherPage();
         }
     }
@@ -224,6 +219,7 @@ public class Festivals extends AppCompatActivity implements
             message = String.format(FESTIVAL_RETIRE, idFestival);
             boutonFavori.setImageResource(R.drawable.etoile_inactive);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
             // TODO appel API avec l'id du festival (pas besoin de la clé API qui désigne l'user car déjà stockée en statique dans ApiManager)
         } else {
             message = String.format(FESTIVAL_AJOUTE, idFestival);
@@ -347,4 +343,7 @@ public class Festivals extends AppCompatActivity implements
         festivalsStockes.add(j4);
         afficherPage();
     }
+
+
+
 }

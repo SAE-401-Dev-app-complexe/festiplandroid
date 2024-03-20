@@ -144,4 +144,11 @@ public class Connexion extends AppCompatActivity {
             connexionErreur.setText(erreur);
         }
     }
+    @Override
+    public void onBackPressed() {
+        System.out.println(ApiManager.getCle());
+        if(ApiManager.getCle() != null) {
+            super.onBackPressed();
+        }
+    }
 }
