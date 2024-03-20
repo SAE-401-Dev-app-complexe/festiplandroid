@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Vue décrivant la disposition au sein de chaque item de la liste
- qui affiche les photos de Paris.
+<!-- Vue décrivant la disposition au sein de chaque item de la liste des festivals
  Illustration de l'utilisation d'un CardView pour chaque item de
  la liste -->
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -24,7 +23,7 @@
 
         <TableRow android:gravity="center">
             <ImageView
-                android:id="@+id/image"
+                android:id="@+id/illustration"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginBottom="1dp"

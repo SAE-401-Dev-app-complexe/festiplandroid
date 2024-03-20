@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -20,15 +19,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,9 +38,6 @@ public class Festivals extends AppCompatActivity implements
     private final String URL_FESTIVAL_PROGRAMMES = "";
 
     private final int NOMBRE_FESTIVAL_PAGE = 3;
-    private ArrayAdapter<String> adaptateurFestivals;
-
-    private ListView listeFestivals;
 
     public enum TYPE_FESTIVALS {;
         public static final String PROGRAMMES = "Programmes";
@@ -71,17 +60,16 @@ public class Festivals extends AppCompatActivity implements
 
     /**
      * Liste source des données à afficher :
-     * chaque élément contient une instance de PhotoParis (une photo
-     * et son libellé)
+     * chaque élément contient une instance de InfosFestival
      */
-    private ArrayList<PhotoParis> listePhoto;
+    private ArrayList<InfosFestival> listeFestivals;
 
     private ImageButton boutonFavori;
 
     /**
-     * Element permettant d'afficher la liste des photos
+     * Element permettant d'afficher la liste des festivals
      */
-    private RecyclerView photoRecyclerView;
+    private RecyclerView festivalsRecyclerView;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -95,48 +83,34 @@ public class Festivals extends AppCompatActivity implements
         barre.setDisplayShowCustomEnabled(true);
         barre.setCustomView(R.layout.action_bar);
         barre.setBackgroundDrawable(getResources().getDrawable(R.drawable.fond_barre_action));
-        
-        /*listeFestivals = findViewById(R.id.listeFestivals);
-        adaptateurFestivals = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1);
 
-        listeFestivals.setAdapter(adaptateurFestivals);
-        listeFestivals.setOnItemClickListener(this);
+        festivalsRecyclerView = findViewById(R.id.liste_festivals);
+        initialiseListeFestivals();
+
+        LinearLayoutManager gestionnaireLineaire = new LinearLayoutManager(this);
+        festivalsRecyclerView.setLayoutManager(gestionnaireLineaire);
+
+        /*
+         * On crée un adaptateur personnalisé et permettant de gérer spécifiquement
+         * l'affichage des instances de type InfosFestival en tant que item de la liste.
+         * Cet adapatateur est associé au RecyclerView
+         */
+        FestivalsAdapter adaptateur = new FestivalsAdapter(listeFestivals);
+        festivalsRecyclerView.setAdapter(adaptateur);
+
         // STUB
         page = 1;
         typeFestivals = TYPE_FESTIVALS.PROGRAMMES;
         // FIN STUB
+
         festivalsStockes = new ArrayList<>();
         idFestivals = new ArrayList<>();
+
         chargerFestivalsProgrammes();
+
         lanceurFestivalsDetails =
-                registerForActivityResult(
-                        new ActivityResultContracts.StartActivityForResult(), this::retourDetails);*/
-
-        photoRecyclerView = findViewById(R.id.my_recycler_view);
-        initialiseListePhoto();
-
-        LinearLayoutManager gestionnaireLineaire = new LinearLayoutManager(this);
-        photoRecyclerView.setLayoutManager(gestionnaireLineaire);
-
-        /*
-         * On crée un adaptateur personnalisé et permettant de gérer spécifiquement
-         * l'affichage des instances de type PhotoParis en tant que item de la liste.
-         * Cet adapatateur est associé au RecyclerView
-         */
-        PhotoAdapter adaptateur = new PhotoAdapter(listePhoto);
-        photoRecyclerView.setAdapter(adaptateur);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-        Intent pageDetails = new Intent(this,DetailsFestival.class);
-
-        int idFestival = idFestivals.get(position);
-
-        pageDetails.putExtra("idFestival",idFestival);
-
-        lanceurFestivalsDetails.launch(pageDetails);
+            registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), this::retourDetails);
     }
 
     @Override
@@ -163,97 +137,6 @@ public class Festivals extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    private void chargerFestivals() {
-        if (typeFestivals.equals(TYPE_FESTIVALS.PROGRAMMES)) {
-            chargerFestivalsProgrammes();
-
-        } else if(typeFestivals.equals(TYPE_FESTIVALS.FAVORIS)) {
-            chargerFestivalsFavoris();
-        }
-
-    }
-    private void chargerFestivalsProgrammes()  {
-        /*ApiManager.appelApi(URL_FESTIVAL_PROGRAMMES, this, new ListenerApi() {
-            @Override
-            public void onReponsePositive(String reponseApi) {
-                
-            }
-            @Override
-            public void onReponsePositive(JSONObject reponseApi)  {
-                try {
-                    festivalsStockes.clear();
-                    JSONArray festivals = reponseApi.getJSONArray("festivals");
-                    for (int i = 0; i < festivals.length(); i++) {
-                        JSONObject festival = festivals.getJSONObject(i);
-                        festivalsStockes.add(festival);
-                    }
-                }catch (JSONException e) {
-
-                }
-            }
-
-
-            @Override
-            public void onReponseErreur(String erreur) {
-
-            }
-        },null,Request.Method.GET);*/
-        afficherPage();
-        adaptateurFestivals.add("f1");
-        adaptateurFestivals.add("f2");
-    }
-
-    private void chargerFestivalsFavoris() {
-         /*ApiManager.appelApi(URL_FESTIVAL_FAVORIS, this, new ListenerApi() {
-            @Override
-            public void onReponsePositive(String reponseApi) {
-                
-            }
-            @Override
-            public void onReponsePositive(JSONObject reponseApi) {
-                try {
-                    festivalsStockes.clear();
-                    JSONArray festivals = reponseApi.getJSONArray("festivals");
-                    for (int i = 0; i < festivals.length(); i++) {
-                        JSONObject festival = festivals.getJSONObject(i);
-                        festivalsStockes.add(festival);
-                    }
-                }catch (JSONException e) {
-
-                }
-            }
-
-
-            @Override
-            public void onReponseErreur(String erreur) {
-
-            }
-
-        },null,Request.Method.GET);*/
-         JSONObject j1 = new JSONObject();
-        JSONObject j2 = new JSONObject();
-        JSONObject j3 = new JSONObject();
-        JSONObject j4 = new JSONObject();
-        try {
-            j1.put("idFestival",1);
-            j1.put("titre","j1");
-            j2.put("idFestival",2);
-            j2.put("titre","j2");
-            j3.put("idFestival",3);
-            j3.put("titre","j3");
-            j4.put("idFestival",4);
-            j4.put("titre","j4");
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-
-         festivalsStockes.add(j1);
-        festivalsStockes.add(j2);
-        festivalsStockes.add(j3);
-        festivalsStockes.add(j4);
-        afficherPage();
-    }
-
     /**
      * Déconnecte l'utilisateur et le redirige vers la page de connexion.
      */
@@ -262,16 +145,23 @@ public class Festivals extends AppCompatActivity implements
         startActivity(pageConnexion);
     }
 
-    private void viderAdaptateur() {
-        adaptateurFestivals.clear();
-    }
-
     // Non nécessaires les informations sont gardés aprés changement de page
     private void retourDetails(ActivityResult resultat) {
       /*  if(resultat.getResultCode() == Activity.RESULT_OK) {
             //chargerFestivals();
         }
     */
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+        Intent pageDetails = new Intent(this,DetailsFestival.class);
+
+        int idFestival = idFestivals.get(position);
+
+        pageDetails.putExtra("idFestival",idFestival);
+
+        lanceurFestivalsDetails.launch(pageDetails);
     }
 
     /**
@@ -302,32 +192,7 @@ public class Festivals extends AppCompatActivity implements
             afficherPage();
         }
     }
-    public void afficherPage()  {
-        viderAdaptateur();
-        try {
-            int pageDebut = (page-1) * NOMBRE_FESTIVAL_PAGE ;
-            int pageFin = pageDebut + NOMBRE_FESTIVAL_PAGE;
-            idFestivals.clear();
 
-            for (int num = pageDebut; num < festivalsStockes.size() && num < pageFin; num++) {
-                System.out.println(festivalsStockes.get(num));
-                idFestivals.add(Integer.parseInt(festivalsStockes.get(num).getString("idFestival")));
-                adaptateurFestivals.add("stub");
-                //adaptateurFestivals.add(festivalsStockes.get(num).getString("titre"));
-            }
-        } catch (JSONException e) {
-
-        }
-    }
-
-    /**
-     * Méthode pour initialiser la liste des photos et des textes
-     */
-    private void initialiseListePhoto() {
-        listePhoto = new ArrayList<>();
-        listePhoto.add(new PhotoParis("Exemple festival numéro 1", R.drawable.default_illustration));
-        listePhoto.add(new PhotoParis("aaaaaaaaaazzzzssxcvbn,;  bvcxszedfg", R.drawable.default_illustration));
-    }
 
     /**
      * Méthode appelée lors du clic sur le bouton de favori.
@@ -349,5 +214,116 @@ public class Festivals extends AppCompatActivity implements
             boutonFavori.setImageResource(R.drawable.etoile_active);
             Toast.makeText(this, FESTIVAL_AJOUTE, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void afficherPage()  {
+        //viderListeFestivals();
+        try {
+            int pageDebut = (page-1) * NOMBRE_FESTIVAL_PAGE ;
+            int pageFin = pageDebut + NOMBRE_FESTIVAL_PAGE;
+            idFestivals.clear();
+
+            for (int num = pageDebut; num < festivalsStockes.size() && num < pageFin; num++) {
+                System.out.println(festivalsStockes.get(num));
+                idFestivals.add(Integer.parseInt(festivalsStockes.get(num).getString("idFestival")));
+                listeFestivals.add(new InfosFestival(festivalsStockes.get(num).getString("titre"), R.drawable.default_illustration));
+            }
+        } catch (JSONException e) {
+
+        }
+    }
+
+    /**
+     * Méthode pour initialiser la liste des festivals
+     */
+    private void initialiseListeFestivals() {
+        listeFestivals = new ArrayList<>();
+        listeFestivals.add(new InfosFestival("Exemple festival numéro 1", R.drawable.default_illustration));
+        listeFestivals.add(new InfosFestival("aaaaaaaaaazzzzssxcvbn,;  bvcxszedfg", R.drawable.default_illustration));
+    }
+
+    private void viderListeFestivals() {
+        listeFestivals.clear();
+    }
+
+    private void chargerFestivalsProgrammes()  {
+        /*ApiManager.appelApi(URL_FESTIVAL_PROGRAMMES, this, new ListenerApi() {
+            @Override
+            public void onReponsePositive(String reponseApi) {
+
+            }
+            @Override
+            public void onReponsePositive(JSONObject reponseApi)  {
+                try {
+                    festivalsStockes.clear();
+                    JSONArray festivals = reponseApi.getJSONArray("festivals");
+                    for (int i = 0; i < festivals.length(); i++) {
+                        JSONObject festival = festivals.getJSONObject(i);
+                        festivalsStockes.add(festival);
+                    }
+                }catch (JSONException e) {
+
+                }
+            }
+
+
+            @Override
+            public void onReponseErreur(String erreur) {
+
+            }
+        },null,Request.Method.GET);*/
+        afficherPage();
+    }
+
+    private void chargerFestivalsFavoris() {
+         /*ApiManager.appelApi(URL_FESTIVAL_FAVORIS, this, new ListenerApi() {
+            @Override
+            public void onReponsePositive(String reponseApi) {
+
+            }
+            @Override
+            public void onReponsePositive(JSONObject reponseApi) {
+                try {
+                    festivalsStockes.clear();
+                    JSONArray festivals = reponseApi.getJSONArray("festivals");
+                    for (int i = 0; i < festivals.length(); i++) {
+                        JSONObject festival = festivals.getJSONObject(i);
+                        festivalsStockes.add(festival);
+                    }
+                }catch (JSONException e) {
+
+                }
+            }
+
+
+            @Override
+            public void onReponseErreur(String erreur) {
+
+            }
+
+        },null,Request.Method.GET);*/
+
+        JSONObject j1 = new JSONObject();
+        JSONObject j2 = new JSONObject();
+        JSONObject j3 = new JSONObject();
+        JSONObject j4 = new JSONObject();
+        try {
+            j1.put("idFestival",1);
+            j1.put("titre","j1");
+            j2.put("idFestival",2);
+            j2.put("titre","j2");
+            j3.put("idFestival",3);
+            j3.put("titre","j3");
+            j4.put("idFestival",4);
+            j4.put("titre","j4");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+        festivalsStockes.add(j1);
+        festivalsStockes.add(j2);
+        festivalsStockes.add(j3);
+        festivalsStockes.add(j4);
+        afficherPage();
     }
 }

@@ -9,7 +9,7 @@
 
     <TableRow android:gravity="center">
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/my_recycler_view"
+            android:id="@+id/liste_festivals"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
