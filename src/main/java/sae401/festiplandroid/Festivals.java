@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -42,7 +43,7 @@ public class Festivals extends AppCompatActivity implements
 
     private final String URL_FESTIVAL_PROGRAMMES =  "http://10.0.2.2/API/testAPISAE/API/festival";
 
-    private final int NOMBRE_FESTIVAL_PAGE = 2;
+    private final int NOMBRE_FESTIVAL_PAGE = 3;
 
     public enum TYPE_FESTIVALS {;
         public static final String PROGRAMMES = "Programmes";
@@ -57,6 +58,8 @@ public class Festivals extends AppCompatActivity implements
     private ArrayList<JSONObject> festivalsStockes;
 
     private int page;
+
+    private TextView chargementDonnes;
 
     private String typeFestivals;
 
@@ -84,6 +87,7 @@ public class Festivals extends AppCompatActivity implements
         barre.setCustomView(R.layout.action_bar);
         barre.setBackgroundDrawable(getResources().getDrawable(R.drawable.fond_barre_action));
 
+        chargementDonnes = findViewById(R.id.chargement);
         festivalsRecyclerView = findViewById(R.id.liste_festivals);
         initialiseListeFestivals();
 
@@ -263,6 +267,7 @@ public class Festivals extends AppCompatActivity implements
                 listeFestivals.add(new InfosFestival(titre, R.drawable.default_illustration,idFestival,favoris,dateDeb,dateFin));
 
             }
+            chargementDonnes.setVisibility(View.INVISIBLE);
             System.out.println(listeFestivals.get(0).getTitre());
             System.out.println(listeFestivals.size());
             System.out.println(adaptateur.getItemCount());
@@ -288,6 +293,7 @@ public class Festivals extends AppCompatActivity implements
     }
 
     private void chargerFestivalsProgrammes()  {
+        chargementDonnes.setVisibility(View.VISIBLE);
         ApiManager.appelApiArray(URL_FESTIVAL_PROGRAMMES, this, new ListenerApi<JSONArray>() {
 
             @Override
@@ -318,6 +324,7 @@ public class Festivals extends AppCompatActivity implements
     }
 
     private void chargerFestivalsFavoris() {
+        chargementDonnes.setVisibility(View.VISIBLE);
          /*ApiManager.appelApi(URL_FESTIVAL_FAVORIS, this, new ListenerApi() {
             @Override
             public void onReponsePositive(String reponseApi) {

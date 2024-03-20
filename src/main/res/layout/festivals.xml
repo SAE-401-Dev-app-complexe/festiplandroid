@@ -6,13 +6,20 @@
     android:orientation="vertical"
     android:padding="@dimen/padding_page"
     tools:context=".Festivals">
-
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:id="@+id/chargement"
+        android:text="@string/festivals_chargement_donnees"/>
     <TableRow android:gravity="center">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/liste_festivals"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+
             android:scrollbars="vertical" />
     </TableRow>
 

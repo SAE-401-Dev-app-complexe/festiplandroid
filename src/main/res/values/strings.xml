@@ -17,4 +17,6 @@
     <string name="festivals_placeholder_titre">Titre du festival</string>
     <string name="festivals_placeholder_dates">Du 00/00/0000\nau 00/00/0000</string>
     <string name="festivals_description_image">Image représentant le festival affiché</string>
+
+    <string name="festivals_chargement_donnees">Chargement des festivals</string>
 </resources>
