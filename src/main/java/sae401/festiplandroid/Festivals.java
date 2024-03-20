@@ -39,7 +39,7 @@ public class Festivals extends AppCompatActivity implements
 
     private FestivalsAdapter adaptateur;
 
-    private final String URL_FESTIVAL_FAVORIS = "";
+    private final String URL_FESTIVAL_FAVORIS = "http://10.0.2.2/API/testAPISAE/API/favoris";
 
     private final String URL_FESTIVAL_PROGRAMMES =  "http://10.0.2.2/API/testAPISAE/API/festival";
 
@@ -268,12 +268,7 @@ public class Festivals extends AppCompatActivity implements
 
             }
             chargementDonnes.setVisibility(View.INVISIBLE);
-            System.out.println(listeFestivals.get(0).getTitre());
-            System.out.println(listeFestivals.size());
-            System.out.println(adaptateur.getItemCount());
-            System.out.println("sizeList"+listeFestivals.size());
-            System.out.println("nbItemList"+adaptateur.getItemCount());
-        } catch (JSONException e) {}
+        } catch (JSONException e) { System.err.println(e);}
     }
 
     /**
@@ -303,18 +298,14 @@ public class Festivals extends AppCompatActivity implements
                     festivalsStockes.clear();
                     JSONArray festivals = reponseApi;
                     for (int i = 0; i < festivals.length(); i++) {
-
                         JSONObject festival = festivals.getJSONObject(i);
-                        System.out.println("onresponse"+festival);
                         festivalsStockes.add(festival);
                     }
                     afficherPage();
                 }catch (JSONException e) {
 
                 }
-
             }
-
 
             @Override
             public void onReponseErreur(String erreur) {
@@ -325,20 +316,18 @@ public class Festivals extends AppCompatActivity implements
 
     private void chargerFestivalsFavoris() {
         chargementDonnes.setVisibility(View.VISIBLE);
-         /*ApiManager.appelApi(URL_FESTIVAL_FAVORIS, this, new ListenerApi() {
+         ApiManager.appelApiArray(URL_FESTIVAL_FAVORIS, this, new ListenerApi<JSONArray>() {
             @Override
-            public void onReponsePositive(String reponseApi) {
-
-            }
-            @Override
-            public void onReponsePositive(JSONObject reponseApi) {
+            public void onReponsePositive(JSONArray reponseApi) {
+                listeFestivals.clear();
                 try {
                     festivalsStockes.clear();
-                    JSONArray festivals = reponseApi.getJSONArray("festivals");
+                    JSONArray festivals = reponseApi;
                     for (int i = 0; i < festivals.length(); i++) {
                         JSONObject festival = festivals.getJSONObject(i);
                         festivalsStockes.add(festival);
                     }
+                    afficherPage();
                 }catch (JSONException e) {
 
                 }
@@ -349,30 +338,7 @@ public class Festivals extends AppCompatActivity implements
             public void onReponseErreur(String erreur) {
 
             }
+        },null,Request.Method.GET);
 
-        },null,Request.Method.GET);*/
-
-        JSONObject j1 = new JSONObject();
-        JSONObject j2 = new JSONObject();
-        JSONObject j3 = new JSONObject();
-        JSONObject j4 = new JSONObject();
-        try {
-            j1.put("idFestival",1);
-            j1.put("titre","j1");
-            j2.put("idFestival",2);
-            j2.put("titre","j2");
-            j3.put("idFestival",3);
-            j3.put("titre","j3");
-            j4.put("idFestival",4);
-            j4.put("titre","j4");
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-
-        festivalsStockes.add(j1);
-        festivalsStockes.add(j2);
-        festivalsStockes.add(j3);
-        festivalsStockes.add(j4);
-        afficherPage();
     }
 }
