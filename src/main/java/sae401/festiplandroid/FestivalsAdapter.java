@@ -5,10 +5,12 @@
 package sae401.festiplandroid;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -73,6 +75,8 @@ public class FestivalsAdapter extends RecyclerView.Adapter<FestivalsViewHolder> 
 
         // Associer l'ID du festival au bouton favori
         myViewHolder.boutonFavori.setTag(myObject.getIdFestival());
+
+
 
         // Associer l'ID du festival à l'item
         myViewHolder.itemView.setTag(myObject.getIdFestival());

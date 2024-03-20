@@ -42,7 +42,7 @@ public class Festivals extends AppCompatActivity implements
 
     private final String URL_FESTIVAL_PROGRAMMES =  "http://10.0.2.2/API/testAPISAE/API/festival";
 
-    private final int NOMBRE_FESTIVAL_PAGE = 3;
+    private final int NOMBRE_FESTIVAL_PAGE = 2;
 
     public enum TYPE_FESTIVALS {;
         public static final String PROGRAMMES = "Programmes";
@@ -76,7 +76,7 @@ public class Festivals extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.festivals);
-
+        ApiManager.setCleApi("19b7eaf42fd7d743a252");
         ActionBar barre = getSupportActionBar();
 
         barre.setDisplayShowTitleEnabled(false);
@@ -248,10 +248,19 @@ public class Festivals extends AppCompatActivity implements
             System.out.println(festivalsStockes.size());
             //listeFestivals.clear();
             for (int num = pageDebut; num < festivalsStockes.size() && num < pageFin; num++) {
-                System.out.println(festivalsStockes.get(num));
-                System.out.println(festivalsStockes.get(num).getString("titre"));
-                idFestivals.add(Integer.parseInt(festivalsStockes.get(num).getString("idFestival")));
-                listeFestivals.add(new InfosFestival(festivalsStockes.get(num).getString("titre"), R.drawable.default_illustration, Integer.parseInt(festivalsStockes.get(num).getString("idFestival"))));
+                JSONObject festivalJson = festivalsStockes.get(num);
+                int idFestival = festivalJson.getInt("idFestival");
+                String titre = festivalJson.getString("titre");
+                boolean favoris;
+                if(festivalJson.getInt("favoris") == 1) {
+                    favoris = true;
+                } else {
+                    favoris = false;
+                }
+                String dateDeb= festivalJson.getString("dateDebut");
+                String dateFin= festivalJson.getString("dateFin");
+                idFestivals.add(idFestival);
+                listeFestivals.add(new InfosFestival(titre, R.drawable.default_illustration,idFestival,favoris,dateDeb,dateFin));
 
             }
             System.out.println(listeFestivals.get(0).getTitre());
@@ -267,8 +276,8 @@ public class Festivals extends AppCompatActivity implements
      */
     private void initialiseListeFestivals() {
         listeFestivals = new ArrayList<>();
-        listeFestivals.add(new InfosFestival("Exemple festival numér", R.drawable.default_illustration, 0));
-        listeFestivals.add(new InfosFestival("Exemple festival numéro 1", R.drawable.default_illustration, 1));
+        //listeFestivals.add(new InfosFestival("Exemple festival numér", R.drawable.default_illustration, 0,false));
+        //listeFestivals.add(new InfosFestival("Exemple festival numéro 1", R.drawable.default_illustration, 1,false));
     }
 
     /**

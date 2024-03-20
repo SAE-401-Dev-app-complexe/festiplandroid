@@ -22,15 +22,24 @@ public class InfosFestival {
 
     private int idFestival;
 
+    private boolean favoris;
+
+    private String dateDeb;
+
+    private String dateFin;
+
     /**
      * Constructeur avec en argument les valeurs des 2 attributs
      * @param titre titre du festival
      * @param illustration identifiant de l'illustration du festival
      */
-    public InfosFestival(String titre, int illustration, int idFestival) {
+    public InfosFestival(String titre, int illustration, int idFestival,boolean favoris,String dateDeb,String dateFin) {
         this.titre = titre;
         this.illustration = illustration;
         this.idFestival = idFestival;
+        this.favoris = favoris;
+        this.dateDeb = dateDeb;
+        this.dateFin = dateFin;
     }
     /**
      * Renvoie le titre du festival
@@ -48,7 +57,19 @@ public class InfosFestival {
         return illustration;
     }
 
+    public String getDateFin() {
+        return dateFin;
+    }
+
+    public String getDateDeb() {
+        return dateDeb;
+    }
+
     public int getIdFestival() {
         return idFestival;
+    }
+
+    public boolean isFavoris() {
+        return favoris;
     }
 }

@@ -4,11 +4,13 @@
  */
 package sae401.festiplandroid;
 
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
@@ -37,6 +39,8 @@ public class FestivalsViewHolder extends RecyclerView.ViewHolder {
      */
     public ImageButton boutonFavori;
 
+    private TextView dates;
+
     /**
      * Constructeur avec en argument une vue correspondant
      * à un item de la liste
@@ -51,6 +55,7 @@ public class FestivalsViewHolder extends RecyclerView.ViewHolder {
         titre = (TextView) itemView.findViewById(R.id.titre);
         illustration = (ImageView) itemView.findViewById(R.id.illustration);
         boutonFavori = (ImageButton) itemView.findViewById(R.id.bouton_favori);
+        dates = (TextView) itemView.findViewById(R.id.dates);
 
     }
 
@@ -63,6 +68,15 @@ public class FestivalsViewHolder extends RecyclerView.ViewHolder {
         System.out.println("vind");
         titre.setText(festival.getTitre());
         illustration.setImageResource(festival.getIllustration());
+        if(festival.isFavoris()) {
+            Drawable image = ContextCompat.getDrawable(itemView.getContext(),R.drawable.etoile_active);
+            boutonFavori.setImageDrawable(image);
+        } else {
+            Drawable image = ContextCompat.getDrawable(itemView.getContext(),R.drawable.etoile_inactive);
+            boutonFavori.setImageDrawable(image);
+        }
+        dates.setText("Du " + festival.getDateDeb() + " au " + festival.getDateFin());
+
 
     }
 }

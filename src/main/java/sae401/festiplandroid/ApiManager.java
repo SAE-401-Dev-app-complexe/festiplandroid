@@ -76,6 +76,7 @@ public class ApiManager {
     public static void appelApiObjet(String url, AppCompatActivity app,
                                      ListenerApi resultat, JSONObject donnees,
                                      int methode) {
+        System.out.println(cleApi);
         JsonObjectRequest requeteVolley;
 
         if (reseauDisponible(app)) {
