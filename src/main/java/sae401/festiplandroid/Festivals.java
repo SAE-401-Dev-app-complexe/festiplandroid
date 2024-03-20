@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -33,6 +36,10 @@ import java.util.ArrayList;
 
 public class Festivals extends AppCompatActivity implements
         AdapterView.OnItemClickListener {
+
+    private final String FESTIVAL_AJOUTE = "Festival ajouté aux favoris";
+
+    private final String FESTIVAL_RETIRE = "Festival retiré des favoris";
 
     private final String URL_FESTIVAL_FAVORIS = "";
 
@@ -68,6 +75,8 @@ public class Festivals extends AppCompatActivity implements
      * et son libellé)
      */
     private ArrayList<PhotoParis> listePhoto;
+
+    private ImageButton boutonFavori;
 
     /**
      * Element permettant d'afficher la liste des photos
@@ -316,7 +325,29 @@ public class Festivals extends AppCompatActivity implements
      */
     private void initialiseListePhoto() {
         listePhoto = new ArrayList<>();
-        listePhoto.add(new PhotoParis("gay", R.drawable.ic_festiplan_noir));
-        listePhoto.add(new PhotoParis("Jardins du Luxembourg", R.drawable.ic_festiplan_blanc));
+        listePhoto.add(new PhotoParis("Exemple festival numéro 1", R.drawable.default_illustration));
+        listePhoto.add(new PhotoParis("aaaaaaaaaazzzzssxcvbn,;  bvcxszedfg", R.drawable.default_illustration));
+    }
+
+    /**
+     * Méthode appelée lors du clic sur le bouton de favori.
+     * @param vue La vue actuelle.
+     */
+    public void clicFavori(View vue) {
+        Drawable.ConstantState etoileActive;
+
+        etoileActive
+        = getResources().getDrawable(R.drawable.etoile_active).getConstantState();
+
+        boutonFavori = (ImageButton) vue;
+
+        // Si l'étoile est active, on la désactive
+        if (boutonFavori.getDrawable().getConstantState().equals(etoileActive)) {
+            boutonFavori.setImageResource(R.drawable.etoile_inactive);
+            Toast.makeText(this, FESTIVAL_RETIRE, Toast.LENGTH_SHORT).show();
+        } else {
+            boutonFavori.setImageResource(R.drawable.etoile_active);
+            Toast.makeText(this, FESTIVAL_AJOUTE, Toast.LENGTH_SHORT).show();
+        }
     }
 }

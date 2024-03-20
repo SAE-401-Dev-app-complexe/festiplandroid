@@ -47,6 +47,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoViewHolder> {
         PhotoParis myObject = lesDonnees.get(position);
         myViewHolder.bind(myObject);
     }
+
     /**
      * Renvoie la taille de la liste
      */
