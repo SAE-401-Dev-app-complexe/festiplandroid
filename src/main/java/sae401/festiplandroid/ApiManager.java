@@ -63,8 +63,8 @@ public class ApiManager {
     }
 
     /**
-     * Appel à l'API dont l'url est passée en paramètre via une requête dont la
-     * méthode est passée en paramètre.
+     * Appel à l'API attendant un objet dont l'url est passée en paramètre
+     * via une requête dont la méthode est passée en paramètre.
      *
      * @param url L'url de l'API.
      * @param app L'activité appelante.
@@ -72,13 +72,53 @@ public class ApiManager {
      * @param donnees Les données à envoyer à l'API.
      * @param methode La méthode de la requête.
      */
-    public static void appelApi(String url, AppCompatActivity app,
-                                ListenerApi resultat, JSONObject donnees,
-                                int methode) {
+    public static void appelApiObjet(String url, AppCompatActivity app,
+                                     ListenerApi resultat, JSONObject donnees,
+                                     int methode) {
         JsonObjectRequest requeteVolley;
 
         if (reseauDisponible(app)) {
             requeteVolley = new JsonObjectRequest(methode, url, donnees,
+                reponse -> resultat.onReponsePositive(reponse),
+                erreur -> gestionErreur(erreur, resultat)
+            ) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    if (cleApi != null)
+                        params.put("APIKEY", cleApi);
+                    return params;
+                }
+            };
+
+            requeteVolley.setRetryPolicy(new DefaultRetryPolicy(
+                TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+            getFileRequete(app).add(requeteVolley);
+        } else {
+            resultat.onReponseErreur(AUCUNE_CONNEXION);
+        }
+    }
+
+    /**
+     * Appel à l'API attendant un tableau dont l'url est passée en paramètre
+     * via une requête dont la méthode est passée en paramètre.
+     *
+     * @param url L'url de l'API.
+     * @param app L'activité appelante.
+     * @param resultat L'interface de réponse à l'API.
+     * @param donnees Les données à envoyer à l'API.
+     * @param methode La méthode de la requête.
+     */
+    public static void appelApiArray(String url, AppCompatActivity app,
+                                     ListenerApi resultat, JSONArray donnees,
+                                     int methode) {
+        JsonArrayRequest requeteVolley;
+
+        if (reseauDisponible(app)) {
+            requeteVolley = new JsonArrayRequest(methode, url, donnees,
                 reponse -> resultat.onReponsePositive(reponse),
                 erreur -> gestionErreur(erreur, resultat)
             ) {
@@ -113,7 +153,7 @@ public class ApiManager {
 
         try {
             String reponse = new String(erreur.networkResponse.data, "utf-8");
-            System.out.println("Erreur détectée : " + reponse);
+            System.out.println("Erreur renvoyée par l'API : " + reponse);
 
             JSONObject donnees = new JSONObject(reponse);
 
@@ -124,7 +164,9 @@ public class ApiManager {
             messageErreur = String.format(ERR_MAUVAISE_REQUETE, error, details);
 
             resultat.onReponseErreur(messageErreur);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            System.out.println("Erreur de volley : " + erreur);
+        }
 
         if (!erreurPrevue)
             resultat.onReponseErreur(CONNEXION_ECHOUEE);
