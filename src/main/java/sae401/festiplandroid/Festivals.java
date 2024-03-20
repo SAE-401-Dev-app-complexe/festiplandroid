@@ -5,7 +5,10 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -59,6 +62,19 @@ public class Festivals extends AppCompatActivity implements
 
     private String typeFestivals;
 
+    /**
+     * Liste source des données à afficher :
+     * chaque élément contient une instance de PhotoParis (une photo
+     * et son libellé)
+     */
+    private ArrayList<PhotoParis> listePhoto;
+
+    /**
+     * Element permettant d'afficher la liste des photos
+     */
+    private RecyclerView photoRecyclerView;
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +87,7 @@ public class Festivals extends AppCompatActivity implements
         barre.setCustomView(R.layout.action_bar);
         barre.setBackgroundDrawable(getResources().getDrawable(R.drawable.fond_barre_action));
         
-        listeFestivals = findViewById(R.id.listeFestivals);
+        /*listeFestivals = findViewById(R.id.listeFestivals);
         adaptateurFestivals = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1);
 
@@ -86,7 +102,21 @@ public class Festivals extends AppCompatActivity implements
         chargerFestivalsProgrammes();
         lanceurFestivalsDetails =
                 registerForActivityResult(
-                        new ActivityResultContracts.StartActivityForResult(), this::retourDetails);
+                        new ActivityResultContracts.StartActivityForResult(), this::retourDetails);*/
+
+        photoRecyclerView = findViewById(R.id.my_recycler_view);
+        initialiseListePhoto();
+
+        LinearLayoutManager gestionnaireLineaire = new LinearLayoutManager(this);
+        photoRecyclerView.setLayoutManager(gestionnaireLineaire);
+
+        /*
+         * On crée un adaptateur personnalisé et permettant de gérer spécifiquement
+         * l'affichage des instances de type PhotoParis en tant que item de la liste.
+         * Cet adapatateur est associé au RecyclerView
+         */
+        PhotoAdapter adaptateur = new PhotoAdapter(listePhoto);
+        photoRecyclerView.setAdapter(adaptateur);
     }
 
     @Override
@@ -216,7 +246,7 @@ public class Festivals extends AppCompatActivity implements
     }
 
     /**
-     * Deconnecte l'utilisateur et le redirige vers la page de connexion.
+     * Déconnecte l'utilisateur et le redirige vers la page de connexion.
      */
     private void deconnecter() {
         Intent pageConnexion = new Intent(this, Connexion.class);
@@ -276,8 +306,17 @@ public class Festivals extends AppCompatActivity implements
                 adaptateurFestivals.add("stub");
                 //adaptateurFestivals.add(festivalsStockes.get(num).getString("titre"));
             }
-        }catch (JSONException e) {
+        } catch (JSONException e) {
 
         }
+    }
+
+    /**
+     * Méthode pour initialiser la liste des photos et des textes
+     */
+    private void initialiseListePhoto() {
+        listePhoto = new ArrayList<>();
+        listePhoto.add(new PhotoParis("gay", R.drawable.ic_festiplan_noir));
+        listePhoto.add(new PhotoParis("Jardins du Luxembourg", R.drawable.ic_festiplan_blanc));
     }
 }

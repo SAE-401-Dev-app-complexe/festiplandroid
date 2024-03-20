@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Vue décrivant la disposition au sein de chaque item de la liste
+ qui affiche les photos de Paris.
+ Illustration de l'utilisation d'un CardView pour chaque item de
+ la liste -->
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="500dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginBottom="15dp"
+    app:cardBackgroundColor="@color/whiter_grey"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="2dp" >
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:stretchColumns="1">
+        <TableRow>
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="2dp"
+                android:layout_span="3"
+                android:scaleType="centerInside"
+                android:contentDescription="Photo du fesrtival"
+                android:src="@drawable/ic_festiplan_noir" />
+        </TableRow>
+
+        <TableRow android:gravity="center">
+            <ImageButton
+                android:id="@+id/etoile"
+                android:layout_width="90dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="Etoile de favori"
+                android:src="@drawable/etoile_active" />
+            <TextView
+                android:id="@+id/titre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:fontFamily="sans-serif"
+                android:textColor="#333"
+                android:textSize="18sp"
+                android:text="Test texte nom festival" />
+            <TextView
+                android:id="@+id/dates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:fontFamily="sans-serif"
+                android:textColor="#333"
+                android:textSize="15sp"
+                android:text="Du 23/01/2024\nau 11/11/1111" />
+        </TableRow>
+    </TableLayout>
+</androidx.cardview.widget.CardView>

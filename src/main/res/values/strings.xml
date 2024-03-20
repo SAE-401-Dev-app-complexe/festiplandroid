@@ -9,7 +9,7 @@
 
     <string name="connexion_button">Connexion</string>
     <!-- ATTENTION : remplacer ip ci-dessous par IPV4 locale (ipconfig dans cmd) -->
-    <string name="lien_api">http://192.168.170.30/API/testAPISAE/API/</string>
+    <string name="lien_api">http://10.108.0.192/API/testAPISAE/API/</string>
 
     <string name="menu_festivals_programmes">Festivals programmés</string>
     <string name="menu_festivals_favoris">Festivals favoris</string>

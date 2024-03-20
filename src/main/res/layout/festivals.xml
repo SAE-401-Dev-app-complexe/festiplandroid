@@ -5,24 +5,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/padding_page"
-    android:stretchColumns="*"
     tools:context=".Festivals">
 
-    <ListView
-        android:id="@+id/listeFestivals"
-        android:layout_width="match_parent"
-        android:drawSelectorOnTop="true"
-        android:layout_height="wrap_content"></ListView>
+    <TableRow android:gravity="center">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/my_recycler_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:scrollbars="vertical" />
+    </TableRow>
 
-    <Button
-        android:text=""
-        android:onClick="pageSuivante"
-        />
+    <TableRow android:gravity="center"
+        android:layout_marginTop="10dp">
+        <Button
+            style="@style/connexion_bouton"
+            android:text="Page précédente"
+            android:layout_span="1"
+            android:onClick="pagePrecedente" />
 
-    <Button
-        android:text=""
-        android:onClick="pagePrecedente"
-        />
-
+        <Button
+            style="@style/connexion_bouton"
+            android:text="Page suivante"
+            android:layout_span="1"
+            android:onClick="pageSuivante" />
+    </TableRow>
 
 </TableLayout>
