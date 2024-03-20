@@ -16,21 +16,14 @@ import org.json.JSONArray;
  * @author Loïc Faugières
  * @author Simon Guiraud
  */
-public interface ListenerApi {
+public interface ListenerApi<T> {
 
     /**
      * Gestion d'une réponse positive de l'API contenant un objet json.
      *
      * @param reponseApi L'éventuelle réponse de l'API.
      */
-    void onReponsePositive(JSONObject reponseApi);
-
-    /**
-     * Gestion d'une réponse positive de l'API contenant un tableau json.
-     *
-     * @param reponseApi L'éventuelle réponse de l'API.
-     */
-    void onReponsePositive(JSONArray reponseApi);
+    void onReponsePositive(T reponseApi);
 
     /**
      * Gestion d'une réponse négative de l'API.
