@@ -46,4 +46,16 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/connexion_texte_bouton</item>
     </style>
+
+    <!-- Style du bouton de pages -->
+    <style name="festivals_bouton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/connexion_largeur_champs</item>
+        <item name="android:backgroundTint">@color/fond_bouton</item>
+        <item name="android:background">@drawable/rounded_edittext</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:ems">8</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/festivals_texte_bouton</item>
+    </style>
 </resources>

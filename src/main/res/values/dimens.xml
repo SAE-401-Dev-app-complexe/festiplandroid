@@ -10,6 +10,7 @@
     <!-- TEXTES -->
     <dimen name="connexion_texte_input">20sp</dimen>
     <dimen name="connexion_texte_bouton">20sp</dimen>
+    <dimen name="festivals_texte_bouton">16sp</dimen>
 
     <!-- TAILLES -->
     <dimen name="connexion_arrondi_champs">8dp</dimen>

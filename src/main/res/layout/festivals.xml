@@ -19,15 +19,15 @@
     <TableRow android:gravity="center"
         android:layout_marginTop="10dp">
         <Button
-            style="@style/connexion_bouton"
+            style="@style/festivals_bouton"
             android:text="Page précédente"
-            android:layout_span="1"
+            android:layout_gravity="start"
             android:onClick="pagePrecedente" />
 
         <Button
-            style="@style/connexion_bouton"
+            style="@style/festivals_bouton"
             android:text="Page suivante"
-            android:layout_span="1"
+            android:layout_gravity="end"
             android:onClick="pageSuivante" />
     </TableRow>
 
