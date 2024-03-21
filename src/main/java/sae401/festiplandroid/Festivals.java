@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,7 +48,7 @@ public class Festivals extends AppCompatActivity implements
 
     private final String URL_FESTIVAL_PROGRAMMES =  "http://10.0.2.2/API/testAPISAE/API/festival";
 
-    private final int NOMBRE_FESTIVAL_PAGE = 2;
+    private final int NOMBRE_FESTIVAL_PAGE = 5;
 
     public enum TYPE_FESTIVALS {;
         public static final String PROGRAMMES = "Programmes";
@@ -95,8 +96,10 @@ public class Festivals extends AppCompatActivity implements
         festivalsRecyclerView = findViewById(R.id.liste_festivals);
         initialiseListeFestivals();
 
+
         LinearLayoutManager gestionnaireLineaire = new LinearLayoutManager(this);
         festivalsRecyclerView.setLayoutManager(gestionnaireLineaire);
+
         //festivalsRecyclerView.getLayoutManager().addView(R.);
         /*
          * On crée un adaptateur personnalisé et permettant de gérer spécifiquement
