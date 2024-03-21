@@ -10,8 +10,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.PixelCopy;
 import android.view.View;
 import android.widget.TextView;
+
+import com.android.volley.Request;
+
+import org.json.JSONObject;
 
 
 public class DetailsFestival extends AppCompatActivity  {
@@ -19,6 +24,8 @@ public class DetailsFestival extends AppCompatActivity  {
     private int idFestival;
 
     private TextView titre;
+
+    private final String URL_FESTIVAL_DETAIL = "http://10.0.2.2/API/testAPISAE/API/festivalDetail";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +41,19 @@ public class DetailsFestival extends AppCompatActivity  {
 
         Intent pagePrecedente = getIntent();
 
-        idFestival = pagePrecedente.getIntExtra("idFestival",0);
+        //idFestival = pagePrecedente.getIntExtra("idFestival",0);
+        //JSONObject donnees = new JSONObject().put("idFestival",idFestival);
+        /*piManager.appelApiObjet(URL_FESTIVAL_DETAIL, this, new ListenerApi<JSONObject>() {
+            @Override
+            public void onReponsePositive(JSONObject reponseApi) {
+                // TODO afficher données
+            }
+
+            @Override
+            public void onReponseErreur(String erreur) {
+
+            }
+        },donnees, Request.Method.GET);*/
 
         titre = findViewById(R.id.titre_festival);
         titre.setText("Festival d'id " + idFestival);

@@ -12,9 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -117,7 +119,6 @@ public class ApiManager {
     public static void appelApiArray(String url, AppCompatActivity app,
                                      ListenerApi resultat, JSONArray donnees,
                                      int methode) {
-        System.out.println(cleApi);
         JsonArrayRequest requeteVolley;
 
         if (reseauDisponible(app)) {
@@ -151,6 +152,7 @@ public class ApiManager {
      * @param resultat L'interface de réponse à l'API.
      */
     private static void gestionErreur(VolleyError erreur, ListenerApi resultat) {
+        System.out.println(cleApi);
         boolean erreurPrevue = false;
         String messageErreur;
 
