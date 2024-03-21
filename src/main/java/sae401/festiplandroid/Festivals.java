@@ -41,9 +41,13 @@ public class Festivals extends AppCompatActivity implements
 
     private final String URL_FESTIVAL_FAVORIS = "http://10.0.2.2/API/testAPISAE/API/favoris";
 
+    private final String URL_FESTIVAL_AJOUT_FAVORIS = "http://10.0.2.2/API/testAPISAE/API/ajouterFavoris";
+
+    private final String URL_FESTIVAL_SUPPRIMER_FAVORIS = "http://10.0.2.2/API/testAPISAE/API/supprimerFavoris";
+
     private final String URL_FESTIVAL_PROGRAMMES =  "http://10.0.2.2/API/testAPISAE/API/festival";
 
-    private final int NOMBRE_FESTIVAL_PAGE = 3;
+    private final int NOMBRE_FESTIVAL_PAGE = 2;
 
     public enum TYPE_FESTIVALS {;
         public static final String PROGRAMMES = "Programmes";
@@ -79,7 +83,7 @@ public class Festivals extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.festivals);
-        ApiManager.setCleApi("19b7eaf42fd7d743a252");
+        //ApiManager.setCleApi("19b7eaf42fd7d743a252");
         ActionBar barre = getSupportActionBar();
 
         barre.setDisplayShowTitleEnabled(false);
@@ -212,7 +216,7 @@ public class Festivals extends AppCompatActivity implements
      * Méthode appelée lors du clic sur le bouton de favori.
      * @param vue La vue actuelle.
      */
-    public void clicFavori(View vue) {
+    public void clicFavori(View vue)  {
         Drawable.ConstantState etoileActive;
 
         String message;
@@ -220,6 +224,14 @@ public class Festivals extends AppCompatActivity implements
         ImageButton boutonFavori = (ImageButton) vue;
 
         int idFestival = idFestival = (Integer) boutonFavori.getTag();
+        JSONObject donnees = null;
+        System.out.println(idFestival);
+        try {
+            donnees = new JSONObject().put("idFestival",idFestival);
+            System.out.println(donnees);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
 
         etoileActive
         = getResources().getDrawable(R.drawable.etoile_active).getConstantState();
@@ -229,13 +241,30 @@ public class Festivals extends AppCompatActivity implements
             message = String.format(FESTIVAL_RETIRE, idFestival);
             boutonFavori.setImageResource(R.drawable.etoile_inactive);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            ApiManager.appelApiObjet(URL_FESTIVAL_SUPPRIMER_FAVORIS,this, new ListenerApi<JSONObject>() {
+                @Override
+                public void onReponsePositive(JSONObject reponseApi) {}
+
+                @Override
+                public void onReponseErreur(String erreur) {}
+            },donnees,Request.Method.PUT);
+
 
             // TODO appel API avec l'id du festival (pas besoin de la clé API qui désigne l'user car déjà stockée en statique dans ApiManager)
         } else {
             message = String.format(FESTIVAL_AJOUTE, idFestival);
             boutonFavori.setImageResource(R.drawable.etoile_active);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-            // TODO appel API avec l'id du festival (pas besoin de la clé API qui désigne l'user car déjà stockée en statique dans ApiManager)
+
+            // Renvoie da6a3d197f916d0a08c7 ???
+            ApiManager.appelApiObjet(URL_FESTIVAL_AJOUT_FAVORIS,this, new ListenerApi<JSONObject>() {
+                @Override
+                public void onReponsePositive(JSONObject reponseApi) {}
+
+                @Override
+                public void onReponseErreur(String erreur) {}
+            },donnees,Request.Method.PUT);
+
         }
     }
 
@@ -244,6 +273,7 @@ public class Festivals extends AppCompatActivity implements
      */
     public void afficherPage()  {
         listeFestivals.clear();
+        // Permet de demander à l'adapteur de d'ajouter les données qui vont être ajoutés
         adaptateur.notifyDataSetChanged();
         try {
             int pageDebut = (page-1) * NOMBRE_FESTIVAL_PAGE ;
@@ -270,6 +300,7 @@ public class Festivals extends AppCompatActivity implements
             chargementDonnes.setVisibility(View.INVISIBLE);
         } catch (JSONException e) { System.err.println(e);}
     }
+
 
     /**
      * Méthode pour initialiser la liste des festivals
@@ -332,8 +363,6 @@ public class Festivals extends AppCompatActivity implements
 
                 }
             }
-
-
             @Override
             public void onReponseErreur(String erreur) {
 
