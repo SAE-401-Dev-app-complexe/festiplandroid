@@ -7,6 +7,7 @@ package sae401.festiplandroid;
 /**
  * Gère les résultats d'un appel d'api.
  * Utiliser avec {@link sae401.festiplandroid.ApiManager}.
+ * Permet de faire la logique sur la requête asynchrone
  *
  * @author Enzo Cluzel
  * @author Lucas Descriaud

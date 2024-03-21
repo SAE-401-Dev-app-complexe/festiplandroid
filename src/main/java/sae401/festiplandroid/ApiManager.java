@@ -36,7 +36,7 @@ import java.util.Map;
  */
 public class ApiManager {
 
-    public final static int TIMEOUT_MS = 1000;
+    public final static int TIMEOUT_MS = 10000;
 
     public final static String AUCUNE_CONNEXION
     = "Aucune connexion internet n'est détectée !";
@@ -207,6 +207,10 @@ public class ApiManager {
         ApiManager.cleApi = cleApi;
     }
 
+    /**
+     * Permet d'obtenir la clé Api de l'utilisateur connectée
+     * @return la clé API
+     */
     public static String getCle() {
         return cleApi;
     }

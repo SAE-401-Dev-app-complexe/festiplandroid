@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.android.volley.Request;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -25,11 +27,23 @@ public class DetailsFestival extends AppCompatActivity  {
 
     private TextView titre;
 
-    private final String URL_FESTIVAL_DETAIL = "http://10.0.2.2/API/testAPISAE/API/festivalDetail";
+    private TextView dates;
 
+    private TextView description;
+
+    private final String URL_FESTIVAL_DETAIL = "http://10.0.2.2/API/testAPISAE/API/details";
+
+    /**
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.details_festival);
 
         ActionBar barre = getSupportActionBar();
@@ -41,22 +55,49 @@ public class DetailsFestival extends AppCompatActivity  {
 
         Intent pagePrecedente = getIntent();
 
-        //idFestival = pagePrecedente.getIntExtra("idFestival",0);
-        //JSONObject donnees = new JSONObject().put("idFestival",idFestival);
-        /*piManager.appelApiObjet(URL_FESTIVAL_DETAIL, this, new ListenerApi<JSONObject>() {
+
+        titre = findViewById(R.id.titre_festival);
+        dates = findViewById(R.id.dates_festival);
+
+        description = findViewById(R.id.description);
+
+        idFestival = pagePrecedente.getIntExtra("idFestival",0);
+        titre.setText(pagePrecedente.getStringExtra("titre"));
+        dates.setText(pagePrecedente.getStringExtra("dates"));
+        description.setText(pagePrecedente.getStringExtra("description"));
+       /* JSONArray donnees = null;
+        try {
+            donnees = new JSONArray();
+            donnees.put(new JSONObject().put("idFestival",idFestival));
+            System.out.println(donnees);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        ApiManager.appelApiArray(URL_FESTIVAL_DETAIL, this, new CallbackApi<JSONArray>() {
             @Override
-            public void onReponsePositive(JSONObject reponseApi) {
+            public void onReponsePositive(JSONArray reponseApi) {
                 // TODO afficher données
+
+                try {
+                    JSONObject festival = reponseApi.getJSONObject(0);
+                    String titreFestival =  festival.getString("titre");
+                    String datesFestival = "Du "+ festival.getString("dateDebut")+ " au " +festival.getString("dateFin");
+                    String descriptionFestival = festival.getString("description");
+                    titre.setText(titreFestival);
+                    dates.setText(datesFestival);
+                    description.setText(descriptionFestival);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
             @Override
             public void onReponseErreur(String erreur) {
 
             }
-        },donnees, Request.Method.GET);*/
+        },donnees, Request.Method.POST);*/
 
-        titre = findViewById(R.id.titre_festival);
-        titre.setText("Festival d'id " + idFestival);
+
     }
 
     @Override
@@ -87,6 +128,7 @@ public class DetailsFestival extends AppCompatActivity  {
      */
     private void chargerFestivalsProgrammes() {
         Intent pageFestivalsProgrammes = new Intent(this, Festivals.class);
+
         startActivity(pageFestivalsProgrammes);
     }
 

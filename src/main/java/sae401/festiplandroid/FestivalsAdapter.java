@@ -79,7 +79,7 @@ public class FestivalsAdapter extends RecyclerView.Adapter<FestivalsViewHolder> 
 
 
         // Associer l'ID du festival à l'item
-        myViewHolder.itemView.setTag(myObject.getIdFestival());
+        myViewHolder.itemView.setTag(position);
 
         // Définir un écouteur de clic sur le bouton favori
         myViewHolder.boutonFavori.setOnClickListener(view -> {

@@ -204,11 +204,17 @@ public class Festivals extends AppCompatActivity implements
     public void clicFestival(View vue) {
         Intent pageDetails = new Intent(this, DetailsFestival.class);
 
-        int idFestival = (Integer) vue.getTag();
 
-        Toast.makeText(this, "Festival n°" + idFestival, Toast.LENGTH_SHORT).show();
+        InfosFestival festival = listeFestivals.get((Integer) vue.getTag());
 
-        pageDetails.putExtra("idFestival", idFestival);
+
+        Toast.makeText(this, "Festival n°" +festival.getIdFestival(), Toast.LENGTH_SHORT).show();
+
+        pageDetails.putExtra("idFestival", festival.getIdFestival());
+        pageDetails.putExtra("titre", festival.getTitre());
+        pageDetails.putExtra("description", festival.getDescription());
+        pageDetails.putExtra("dates", "Du "+ festival.getDateDeb() + " au " + festival.getDateFin());
+
         lanceurFestivalsDetails.launch(pageDetails);
     }
 
@@ -285,6 +291,7 @@ public class Festivals extends AppCompatActivity implements
                 JSONObject festivalJson = festivalsStockes.get(num);
                 int idFestival = festivalJson.getInt("idFestival");
                 String titre = festivalJson.getString("titre");
+                String description = festivalJson.getString("description");
                 boolean favoris;
                 if(festivalJson.getInt("favoris") == 1) {
                     favoris = true;
@@ -294,7 +301,7 @@ public class Festivals extends AppCompatActivity implements
                 String dateDeb= festivalJson.getString("dateDebut");
                 String dateFin= festivalJson.getString("dateFin");
                 idFestivals.add(idFestival);
-                listeFestivals.add(new InfosFestival(titre, R.drawable.default_illustration,idFestival,favoris,dateDeb,dateFin));
+                listeFestivals.add(new InfosFestival(titre, R.drawable.default_illustration,idFestival,favoris,dateDeb,dateFin,description));
 
             }
             chargementDonnes.setVisibility(View.INVISIBLE);
@@ -318,6 +325,9 @@ public class Festivals extends AppCompatActivity implements
         listeFestivals.clear();
     }
 
+    /**
+     * charge les festivals Programmes par un appel API
+     */
     private void chargerFestivalsProgrammes()  {
         chargementDonnes.setVisibility(View.VISIBLE);
         ApiManager.appelApiArray(getString(R.string.lien_api) + "festival",
@@ -334,6 +344,7 @@ public class Festivals extends AppCompatActivity implements
                         JSONObject festival = festivals.getJSONObject(i);
                         festivalsStockes.add(festival);
                     }
+                    page = 1;
                     afficherPage();
                 }catch (JSONException e) {
 
@@ -347,6 +358,9 @@ public class Festivals extends AppCompatActivity implements
 
     }
 
+    /**
+     * charge les festivals Favoris par un appel API
+     */
     private void chargerFestivalsFavoris() {
         chargementDonnes.setVisibility(View.VISIBLE);
          ApiManager.appelApiArray(getString(R.string.lien_api) + "favoris", this, new CallbackApi<JSONArray>() {
@@ -360,6 +374,7 @@ public class Festivals extends AppCompatActivity implements
                         JSONObject festival = festivals.getJSONObject(i);
                         festivalsStockes.add(festival);
                     }
+                    page = 1;
                     afficherPage();
                 }catch (JSONException e) {
 

@@ -14,6 +14,7 @@ package sae401.festiplandroid;
  */
 public class InfosFestival {
 
+    private String description;
     /** Titre du festival */
     private String titre;
 
@@ -33,13 +34,14 @@ public class InfosFestival {
      * @param titre titre du festival
      * @param illustration identifiant de l'illustration du festival
      */
-    public InfosFestival(String titre, int illustration, int idFestival,boolean favoris,String dateDeb,String dateFin) {
+    public InfosFestival(String titre, int illustration, int idFestival,boolean favoris,String dateDeb,String dateFin,String description) {
         this.titre = titre;
         this.illustration = illustration;
         this.idFestival = idFestival;
         this.favoris = favoris;
         this.dateDeb = dateDeb;
         this.dateFin = dateFin;
+        this.description = description;
     }
     /**
      * Renvoie le titre du festival
@@ -66,6 +68,10 @@ public class InfosFestival {
     }
 
     public int getIdFestival() {
+        return idFestival;
+    }
+
+    public int getDescription() {
         return idFestival;
     }
 
