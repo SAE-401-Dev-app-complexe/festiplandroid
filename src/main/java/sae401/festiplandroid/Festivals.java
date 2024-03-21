@@ -289,7 +289,8 @@ public class Festivals extends AppCompatActivity implements
 
     private void chargerFestivalsProgrammes()  {
         chargementDonnes.setVisibility(View.VISIBLE);
-        ApiManager.appelApiArray(URL_FESTIVAL_PROGRAMMES, this, new ListenerApi<JSONArray>() {
+        ApiManager.appelApiArray(getString(R.string.lien_api) + "festival",
+                                 this, new ListenerApi<JSONArray>() {
 
             @Override
             public void onReponsePositive(JSONArray reponseApi)  {
@@ -316,7 +317,8 @@ public class Festivals extends AppCompatActivity implements
 
     private void chargerFestivalsFavoris() {
         chargementDonnes.setVisibility(View.VISIBLE);
-         ApiManager.appelApiArray(URL_FESTIVAL_FAVORIS, this, new ListenerApi<JSONArray>() {
+         ApiManager.appelApiArray(getString(R.string.lien_api) + "favoris",
+                                  this, new ListenerApi<JSONArray>() {
             @Override
             public void onReponsePositive(JSONArray reponseApi) {
                 listeFestivals.clear();
@@ -328,9 +330,7 @@ public class Festivals extends AppCompatActivity implements
                         festivalsStockes.add(festival);
                     }
                     afficherPage();
-                }catch (JSONException e) {
-
-                }
+                } catch (JSONException e) {}
             }
 
 
