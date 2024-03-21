@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public class ApiManager {
 
-    public final static int TIMEOUT_MS = 5000;
+    public final static int TIMEOUT_MS = 1000;
 
     public final static String AUCUNE_CONNEXION
     = "Aucune connexion internet n'est détectée !";
