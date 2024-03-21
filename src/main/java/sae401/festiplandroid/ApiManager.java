@@ -76,7 +76,7 @@ public class ApiManager {
      * @param methode La méthode de la requête.
      */
     public static void appelApiObjet(String url, AppCompatActivity app,
-                                     ListenerApi resultat, JSONObject donnees,
+                                     CallbackApi resultat, JSONObject donnees,
                                      int methode) {
         System.out.println(cleApi);
         JsonObjectRequest requeteVolley;
@@ -117,7 +117,7 @@ public class ApiManager {
      * @param methode La méthode de la requête.
      */
     public static void appelApiArray(String url, AppCompatActivity app,
-                                     ListenerApi resultat, JSONArray donnees,
+                                     CallbackApi resultat, JSONArray donnees,
                                      int methode) {
         JsonArrayRequest requeteVolley;
 
@@ -151,7 +151,7 @@ public class ApiManager {
      * @param erreur L'erreur volley.
      * @param resultat L'interface de réponse à l'API.
      */
-    private static void gestionErreur(VolleyError erreur, ListenerApi resultat) {
+    private static void gestionErreur(VolleyError erreur, CallbackApi resultat) {
         System.out.println(cleApi);
         boolean erreurPrevue = false;
         String messageErreur;

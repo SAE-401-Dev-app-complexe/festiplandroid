@@ -94,7 +94,7 @@ public class Connexion extends AppCompatActivity {
             connexionErreur.setVisibility(View.VISIBLE);
             connexionErreur.setText(R.string.connexion_non_renseigne);
         } else {
-            ApiManager.appelApiObjet(url, this, new ListenerApi<JSONObject>() {
+            ApiManager.appelApiObjet(url, this, new CallbackApi<JSONObject>() {
                 @Override
                 public void onReponsePositive(JSONObject reponseApi) {
                     String cleApi = null;

@@ -241,7 +241,7 @@ public class Festivals extends AppCompatActivity implements
             message = String.format(FESTIVAL_RETIRE, idFestival);
             boutonFavori.setImageResource(R.drawable.etoile_inactive);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-            ApiManager.appelApiObjet(URL_FESTIVAL_SUPPRIMER_FAVORIS,this, new ListenerApi<JSONObject>() {
+            ApiManager.appelApiObjet(URL_FESTIVAL_SUPPRIMER_FAVORIS,this, new CallbackApi<JSONObject>() {
                 @Override
                 public void onReponsePositive(JSONObject reponseApi) {}
 
@@ -249,15 +249,13 @@ public class Festivals extends AppCompatActivity implements
                 public void onReponseErreur(String erreur) {}
             },donnees,Request.Method.PUT);
 
-
-            // TODO appel API avec l'id du festival (pas besoin de la clé API qui désigne l'user car déjà stockée en statique dans ApiManager)
         } else {
             message = String.format(FESTIVAL_AJOUTE, idFestival);
             boutonFavori.setImageResource(R.drawable.etoile_active);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
             // Renvoie da6a3d197f916d0a08c7 ???
-            ApiManager.appelApiObjet(URL_FESTIVAL_AJOUT_FAVORIS,this, new ListenerApi<JSONObject>() {
+            ApiManager.appelApiObjet(URL_FESTIVAL_AJOUT_FAVORIS,this, new CallbackApi<JSONObject>() {
                 @Override
                 public void onReponsePositive(JSONObject reponseApi) {}
 
@@ -320,7 +318,7 @@ public class Festivals extends AppCompatActivity implements
 
     private void chargerFestivalsProgrammes()  {
         chargementDonnes.setVisibility(View.VISIBLE);
-        ApiManager.appelApiArray(URL_FESTIVAL_PROGRAMMES, this, new ListenerApi<JSONArray>() {
+        ApiManager.appelApiArray(URL_FESTIVAL_PROGRAMMES, this, new CallbackApi<JSONArray>() {
 
             @Override
             public void onReponsePositive(JSONArray reponseApi)  {
@@ -347,7 +345,7 @@ public class Festivals extends AppCompatActivity implements
 
     private void chargerFestivalsFavoris() {
         chargementDonnes.setVisibility(View.VISIBLE);
-         ApiManager.appelApiArray(URL_FESTIVAL_FAVORIS, this, new ListenerApi<JSONArray>() {
+         ApiManager.appelApiArray(URL_FESTIVAL_FAVORIS, this, new CallbackApi<JSONArray>() {
             @Override
             public void onReponsePositive(JSONArray reponseApi) {
                 listeFestivals.clear();
