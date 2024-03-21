@@ -28,7 +28,7 @@
         <Button
             style="@style/festivals_bouton"
             android:text="Page précédente"
-            android:layout_gravity="start"
+            android:layout_marginRight="15dp"
             android:onClick="pagePrecedente" />
 
         <Button
