@@ -237,6 +237,40 @@ public class ApiManager {
         }
     }
 
+    public static JSONArray getDonnees(String url, AppCompatActivity app) {
+        appelApiArray(urlFestivalsProgrammes,
+                                 app, new CallbackApi<JSONArray>() {
+            @Override
+            public void onReponsePositive(JSONArray reponseApi) {
+                listeFestivals.clear();
+                try {
+                    festivalsStockes.clear();
+                    JSONArray festivals = reponseApi;
+
+                    if (festivals.length() == 0) {
+                        afficherMessageErreur(AUCUN_FESTIVAL_PROGRAMME);
+                    } else {
+                        affichageNominal();
+
+                        for (int i = 0; i < festivals.length(); i++) {
+                            JSONObject festival = festivals.getJSONObject(i);
+                            festivalsStockes.add(festival);
+                        }
+                    }
+
+                    return festivals;
+                } catch (JSONException e) {
+                    
+                }
+            }
+
+            @Override
+            public void onReponseErreur(String erreur) {
+                
+            }
+        },null, Request.Method.GET);
+    }
+
     /**
      * Définit la clé API pour les appels à l'API.
      * @param cleApi La clé API.
