@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 
@@ -94,6 +95,8 @@ public class Connexion extends AppCompatActivity {
             connexionErreur.setVisibility(View.VISIBLE);
             connexionErreur.setText(R.string.connexion_non_renseigne);
         } else {
+            Toast.makeText(this, "Connexion en cours...", Toast.LENGTH_SHORT).show();
+
             ApiManager.appelApiObjet(url, this, new CallbackApi<JSONObject>() {
                 @Override
                 public void onReponsePositive(JSONObject reponseApi) {
@@ -144,10 +147,10 @@ public class Connexion extends AppCompatActivity {
             connexionErreur.setText(erreur);
         }
     }
+
     @Override
     public void onBackPressed() {
-        System.out.println(ApiManager.getCle());
-        if(ApiManager.getCle() != null) {
+        if (ApiManager.getCle() != null) {
             super.onBackPressed();
         }
     }
