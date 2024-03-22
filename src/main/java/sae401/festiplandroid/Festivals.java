@@ -40,13 +40,13 @@ public class Festivals extends AppCompatActivity implements
 
     private FestivalsAdapter adaptateur;
 
-    private final String URL_FESTIVAL_FAVORIS = "http://10.0.2.2/API/testAPISAE/API/favoris";
+    private final String URL_GET_FAVORIS = getString(R.string.lien_api) + "favoris";
 
-    private final String URL_FESTIVAL_AJOUT_FAVORIS = "http://10.0.2.2/API/testAPISAE/API/ajouterFavoris";
+    private final String URL_AJOUTER_FAVORIS = getString(R.string.lien_api) + "ajouterFavoris";
 
-    private final String URL_FESTIVAL_SUPPRIMER_FAVORIS = "http://10.0.2.2/API/testAPISAE/API/supprimerFavoris";
+    private final String URL_SUPPRIMER_FAVORIS = getString(R.string.lien_api) + "supprimerFavoris";
 
-    private final String URL_FESTIVAL_PROGRAMMES =  "http://10.0.2.2/API/testAPISAE/API/festival";
+    private final String URL_FESTIVAL_PROGRAMMES = getString(R.string.lien_api) + "festivals";
 
     private final int NOMBRE_FESTIVAL_PAGE = 5;
 
@@ -182,11 +182,10 @@ public class Festivals extends AppCompatActivity implements
      * @param v le bouton appuyé
      */
     public void pageSuivante(View v){
-        if(page < (int)Math.ceil((float)festivalsStockes.size()/NOMBRE_FESTIVAL_PAGE)) {
+        if (page < (int) Math.ceil((float) festivalsStockes.size() / NOMBRE_FESTIVAL_PAGE)) {
             page +=1;
             afficherPage();
         }
-
     }
 
     /**
@@ -207,11 +206,11 @@ public class Festivals extends AppCompatActivity implements
     public void clicFestival(View vue) {
         Intent pageDetails = new Intent(this, DetailsFestival.class);
 
-
         InfosFestival festival = listeFestivals.get((Integer) vue.getTag());
 
 
-        Toast.makeText(this, "Festival n°" +festival.getIdFestival(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Festival n°" + festival.getIdFestival(),
+                       Toast.LENGTH_SHORT).show();
 
         pageDetails.putExtra("idFestival", festival.getIdFestival());
         pageDetails.putExtra("titre", festival.getTitre());
@@ -236,7 +235,7 @@ public class Festivals extends AppCompatActivity implements
         JSONObject donnees = null;
         System.out.println(idFestival);
         try {
-            donnees = new JSONObject().put("idFestival",idFestival);
+            donnees = new JSONObject().put("idFestival", idFestival);
             System.out.println(donnees);
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -250,13 +249,13 @@ public class Festivals extends AppCompatActivity implements
             message = String.format(FESTIVAL_RETIRE, idFestival);
             boutonFavori.setImageResource(R.drawable.etoile_inactive);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-            ApiManager.appelApiObjet(getString(R.string.lien_api) + "supprimerFavoris",this, new CallbackApi<JSONObject>() {
+            ApiManager.appelApiObjet(URL_SUPPRIMER_FAVORIS,this, new CallbackApi<JSONObject>() {
                 @Override
                 public void onReponsePositive(JSONObject reponseApi) {}
 
                 @Override
                 public void onReponseErreur(String erreur) {}
-            },donnees,Request.Method.PUT);
+            }, donnees, Request.Method.DELETE);
 
 
             // TODO appel API avec l'id du festival (pas besoin de la clé API qui désigne l'user car déjà stockée en statique dans ApiManager)
@@ -265,15 +264,13 @@ public class Festivals extends AppCompatActivity implements
             boutonFavori.setImageResource(R.drawable.etoile_active);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
-            // Renvoie da6a3d197f916d0a08c7 ???
-            ApiManager.appelApiObjet(getString(R.string.lien_api) + "ajouterFavoris",this, new CallbackApi<JSONObject>() {
+            ApiManager.appelApiObjet(URL_AJOUTER_FAVORIS,this, new CallbackApi<JSONObject>() {
                 @Override
                 public void onReponsePositive(JSONObject reponseApi) {}
 
                 @Override
                 public void onReponseErreur(String erreur) {}
-            },donnees,Request.Method.PUT);
-
+            }, donnees, Request.Method.POST);
         }
     }
 
@@ -329,44 +326,11 @@ public class Festivals extends AppCompatActivity implements
     }
 
     /**
-     * charge les festivals Programmes par un appel API
-     */
-    private void chargerFestivalsProgrammes()  {
-        chargementDonnes.setVisibility(View.VISIBLE);
-        ApiManager.appelApiArray(getString(R.string.lien_api) + "festival",
-                                 this, new CallbackApi<JSONArray>() {
-
-
-            @Override
-            public void onReponsePositive(JSONArray reponseApi)  {
-                listeFestivals.clear();
-                try {
-                    festivalsStockes.clear();
-                    JSONArray festivals = reponseApi;
-                    for (int i = 0; i < festivals.length(); i++) {
-                        JSONObject festival = festivals.getJSONObject(i);
-                        festivalsStockes.add(festival);
-                    }
-                    page = 1;
-                    afficherPage();
-                }catch (JSONException e) {
-
-                }
-            }
-
-            @Override
-            public void onReponseErreur(String erreur) {
-            }
-        },null, Request.Method.GET);
-
-    }
-
-    /**
-     * charge les festivals Favoris par un appel API
+     * Charge les festivals favoris par un appel API.
      */
     private void chargerFestivalsFavoris() {
         chargementDonnes.setVisibility(View.VISIBLE);
-         ApiManager.appelApiArray(getString(R.string.lien_api) + "favoris", this, new CallbackApi<JSONArray>() {
+        ApiManager.appelApiArray(URL_GET_FAVORIS, this, new CallbackApi<JSONArray>() {
             @Override
             public void onReponsePositive(JSONArray reponseApi) {
                 listeFestivals.clear();
@@ -379,15 +343,38 @@ public class Festivals extends AppCompatActivity implements
                     }
                     page = 1;
                     afficherPage();
-                }catch (JSONException e) {
-
-                }
+                } catch (JSONException e) { }
             }
             @Override
-            public void onReponseErreur(String erreur) {
+            public void onReponseErreur(String erreur) { }
+        },null, Request.Method.GET);
+    }
 
+    /**
+     * charge les festivals Programmes par un appel API
+     */
+    private void chargerFestivalsProgrammes()  {
+        chargementDonnes.setVisibility(View.VISIBLE);
+        ApiManager.appelApiArray(URL_FESTIVAL_PROGRAMMES,
+                                 this, new CallbackApi<JSONArray>() {
+
+            @Override
+            public void onReponsePositive(JSONArray reponseApi) {
+                listeFestivals.clear();
+                try {
+                    festivalsStockes.clear();
+                    JSONArray festivals = reponseApi;
+                    for (int i = 0; i < festivals.length(); i++) {
+                        JSONObject festival = festivals.getJSONObject(i);
+                        festivalsStockes.add(festival);
+                    }
+                    page = 1;
+                    afficherPage();
+                } catch (JSONException e) { }
             }
-        },null,Request.Method.GET);
 
+            @Override
+            public void onReponseErreur(String erreur) { }
+        },null, Request.Method.GET);
     }
 }
