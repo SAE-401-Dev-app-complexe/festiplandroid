@@ -64,9 +64,6 @@ public class FestivalsAdapter extends RecyclerView.Adapter<FestivalsViewHolder> 
      */
     @Override
     public void onBindViewHolder(FestivalsViewHolder myViewHolder, int position) {
-        System.out.println("binding");
-        System.out.println(position);
-
         // Récupérer l'objet InfosFestival correspondant à cette position
         InfosFestival myObject = lesDonnees.get(position);
 
@@ -74,9 +71,7 @@ public class FestivalsAdapter extends RecyclerView.Adapter<FestivalsViewHolder> 
         myViewHolder.bind(myObject);
 
         // Associer l'ID du festival au bouton favori
-        myViewHolder.boutonFavori.setTag(myObject.getIdFestival());
-
-
+        myViewHolder.boutonFavori.setTag(position);
 
         // Associer l'ID du festival à l'item
         myViewHolder.itemView.setTag(position);

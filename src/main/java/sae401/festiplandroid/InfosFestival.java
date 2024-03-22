@@ -23,22 +23,22 @@ public class InfosFestival {
 
     private int idFestival;
 
-    private boolean favoris;
+    private boolean favori;
 
     private String dateDeb;
 
     private String dateFin;
 
     /**
-     * Constructeur avec en argument les valeurs des 2 attributs
-     * @param titre titre du festival
-     * @param illustration identifiant de l'illustration du festival
+     * Festival caractérisé par son titre, son illustration, son identifiant,
+     * sa date de début, sa date de fin et sa description.
      */
-    public InfosFestival(String titre, int illustration, int idFestival,boolean favoris,String dateDeb,String dateFin,String description) {
+    public InfosFestival(String titre, int illustration, int idFestival, boolean favori,
+                         String dateDeb, String dateFin, String description) {
         this.titre = titre;
         this.illustration = illustration;
         this.idFestival = idFestival;
-        this.favoris = favoris;
+        this.favori = favori;
         this.dateDeb = dateDeb;
         this.dateFin = dateFin;
         this.description = description;
@@ -75,7 +75,11 @@ public class InfosFestival {
         return idFestival;
     }
 
-    public boolean isFavoris() {
-        return favoris;
+    public boolean isFavori() {
+        return favori;
+    }
+
+    public void setFavori(boolean favori) {
+        this.favori = favori;
     }
 }

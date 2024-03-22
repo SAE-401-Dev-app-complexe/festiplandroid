@@ -43,7 +43,7 @@ public class Festivals extends AppCompatActivity implements
 
     private final String FESTIVAL_RETIRE = "Festival n°%d retiré des favoris";
 
-    private final int NOMBRE_FESTIVAL_PAGE = 5;
+    private final int NOMBRE_FESTIVAL_PAGE = 2;
 
     private FestivalsAdapter adaptateur;
 
@@ -51,9 +51,9 @@ public class Festivals extends AppCompatActivity implements
 
     private String urlFestivalsFavoris;
 
-    private String urlAjouterFavoris;
+    private String urlAjouterFavori;
 
-    private String urlSupprimerFavoris;
+    private String urlSupprimerFavori;
 
     public enum TYPE_FESTIVALS {;
         public static final String PROGRAMMES = "Programmes";
@@ -94,8 +94,8 @@ public class Festivals extends AppCompatActivity implements
 
         urlFestivalsProgrammes = getString(R.string.lien_api) + "festivals";
         urlFestivalsFavoris = getString(R.string.lien_api) + "favoris";
-        urlAjouterFavoris = getString(R.string.lien_api) + "ajouterFavoris";
-        urlSupprimerFavoris = getString(R.string.lien_api) + "supprimerFavoris";
+        urlAjouterFavori = getString(R.string.lien_api) + "ajouterFavori";
+        urlSupprimerFavori = getString(R.string.lien_api) + "supprimerFavori";
 
         ActionBar barre = getSupportActionBar();
 
@@ -108,7 +108,7 @@ public class Festivals extends AppCompatActivity implements
         boutons = findViewById(R.id.boutons);
 
         festivalsRecyclerView = findViewById(R.id.liste_festivals);
-        initialiseListeFestivals();
+        listeFestivals = new ArrayList<>();
 
         LinearLayoutManager gestionnaireLineaire = new LinearLayoutManager(this);
         festivalsRecyclerView.setLayoutManager(gestionnaireLineaire);
@@ -183,9 +183,9 @@ public class Festivals extends AppCompatActivity implements
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         Intent pageDetails = new Intent(this,DetailsFestival.class);
 
-        int idFestival = idFestivals.get(position);
+        int idFestivalClique = idFestivals.get(position);
 
-        pageDetails.putExtra("idFestival",idFestival);
+        pageDetails.putExtra("idFestival", idFestivalClique);
 
         lanceurFestivalsDetails.launch(pageDetails);
     }
@@ -221,7 +221,6 @@ public class Festivals extends AppCompatActivity implements
 
         InfosFestival festival = listeFestivals.get((Integer) vue.getTag());
 
-
         Toast.makeText(this, "Festival n°" + festival.getIdFestival(),
                        Toast.LENGTH_SHORT).show();
 
@@ -242,79 +241,108 @@ public class Festivals extends AppCompatActivity implements
 
         String message;
 
+        JSONObject donnees;
+
         ImageButton boutonFavori = (ImageButton) vue;
 
-        int idFestival = idFestival = (Integer) boutonFavori.getTag();
-        JSONObject donnees = null;
-        System.out.println(idFestival);
+        int position = (Integer) boutonFavori.getTag();
+
+        InfosFestival festival = listeFestivals.get(position);
+
+        int idFestivalClique = festival.getIdFestival();
 
         try {
-            donnees = new JSONObject().put("idFestival", idFestival);
-            System.out.println(donnees);
+            donnees = new JSONObject().put("idFestival", idFestivalClique);
+
+            etoileActive
+            = getResources().getDrawable(R.drawable.etoile_active).getConstantState();
+
+            // Si l'étoile est active, on la désactive
+            if (boutonFavori.getDrawable().getConstantState().equals(etoileActive)) {
+                message = String.format(FESTIVAL_RETIRE, idFestivalClique);
+                boutonFavori.setImageResource(R.drawable.etoile_inactive);
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+                ApiManager.appelApiObjet(urlSupprimerFavori,this,
+                                         new CallbackApi<JSONObject>() {
+                    @Override
+                    public void onReponsePositive(JSONObject reponseApi) {
+                        retirerFavori(position);
+                    }
+
+                    @Override
+                    public void onReponseErreur(String erreur) {}
+                }, donnees, Request.Method.POST);
+            } else {
+                message = String.format(FESTIVAL_AJOUTE, idFestivalClique);
+                boutonFavori.setImageResource(R.drawable.etoile_active);
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+                ApiManager.appelApiObjet(urlAjouterFavori,this,
+                                         new CallbackApi<JSONObject>() {
+                    @Override
+                    public void onReponsePositive(JSONObject reponseApi) {
+                        ajouterFavori(position);
+                    }
+
+                    @Override
+                    public void onReponseErreur(String erreur) {}
+                }, donnees, Request.Method.POST);
+            }
         } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-
-        etoileActive
-        = getResources().getDrawable(R.drawable.etoile_active).getConstantState();
-
-        // Si l'étoile est active, on la désactive
-        if (boutonFavori.getDrawable().getConstantState().equals(etoileActive)) {
-            message = String.format(FESTIVAL_RETIRE, idFestival);
-            boutonFavori.setImageResource(R.drawable.etoile_inactive);
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-
-            ApiManager.appelApiObjet(urlSupprimerFavoris,this, new CallbackApi<JSONObject>() {
-                @Override
-                public void onReponsePositive(JSONObject reponseApi) {}
-
-                @Override
-                public void onReponseErreur(String erreur) {}
-            }, donnees, Request.Method.DELETE);
-
-            // TODO appel API avec l'id du festival (pas besoin de la clé API qui désigne l'user car déjà stockée en statique dans ApiManager)
-        } else {
-            message = String.format(FESTIVAL_AJOUTE, idFestival);
-            boutonFavori.setImageResource(R.drawable.etoile_active);
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-
-            ApiManager.appelApiObjet(urlAjouterFavoris,this, new CallbackApi<JSONObject>() {
-                @Override
-                public void onReponsePositive(JSONObject reponseApi) {}
-
-                @Override
-                public void onReponseErreur(String erreur) {}
-            }, donnees, Request.Method.POST);
+            Toast.makeText(this, "Une erreur est survenue",
+                           Toast.LENGTH_SHORT).show();
         }
     }
 
     /**
-     * Affiche les festivals de la page actuelle
+     * Rend faux l'attribut "favori" d'un festival.
+     * @param positionFestival La position du festival dans la liste.
+     */
+    private void retirerFavori(int positionFestival) {
+        listeFestivals.get(positionFestival).setFavori(false);
+    }
+
+    /**
+     * Rend vrai l'attribut "favori" d'un festival.
+     * @param positionFestival La position du festival dans la liste.
+     */
+    private void ajouterFavori(int positionFestival) {
+        listeFestivals.get(positionFestival).setFavori(true);
+    }
+
+    /**
+     * Affiche les festivals de la page actuelle.
      */
     public void afficherPage()  {
         listeFestivals.clear();
-        // Permet de demander à l'adapteur de d'ajouter les données qui vont être ajoutés
+
+        // Permet de demander à l'adapteur de d'ajouter
+        // les données qui vont être ajoutés
         adaptateur.notifyDataSetChanged();
 
         try {
-            int pageDebut = (page-1) * NOMBRE_FESTIVAL_PAGE ;
+            int pageDebut = (page - 1) * NOMBRE_FESTIVAL_PAGE ;
             int pageFin = pageDebut + NOMBRE_FESTIVAL_PAGE;
 
             idFestivals.clear();
-            System.out.println(festivalsStockes.size());
 
-            //listeFestivals.clear();
             for (int num = pageDebut; num < festivalsStockes.size() && num < pageFin; num++) {
                 JSONObject festivalJson = festivalsStockes.get(num);
+
                 int idFestival = festivalJson.getInt("idFestival");
                 String titre = festivalJson.getString("titre");
                 String description = festivalJson.getString("description");
-                boolean favoris;
-
-                favoris = festivalJson.getInt("favoris") == 1;
-
                 String dateDeb = festivalJson.getString("dateDebut");
                 String dateFin = festivalJson.getString("dateFin");
+
+                boolean favoris;
+
+                try {
+                    favoris = festivalJson.getInt("favoris") == 1;
+                } catch (JSONException e) {
+                    favoris = true;
+                }
 
                 idFestivals.add(idFestival);
                 listeFestivals.add(new InfosFestival(titre, R.drawable.default_illustration,
@@ -325,30 +353,13 @@ public class Festivals extends AppCompatActivity implements
     }
 
     /**
-     * Méthode pour initialiser la liste des festivals
-     */
-    private void initialiseListeFestivals() {
-        listeFestivals = new ArrayList<>();
-        //listeFestivals.add(new InfosFestival("Exemple festival numér", R.drawable.default_illustration, 0,false));
-        //listeFestivals.add(new InfosFestival("Exemple festival numéro 1", R.drawable.default_illustration, 1,false));
-    }
-
-    /**
-     * Méthode pour vider la liste des festivals
-     */
-    private void viderListeFestivals() {
-        listeFestivals.clear();
-    }
-
-    /**
-     * charge les festivals Programmes par un appel API
+     * Charge les festivals programmés par un appel API.
      */
     private void chargerFestivalsProgrammes()  {
         afficherMessageErreur(getString(R.string.festivals_chargement_donnees));
 
         ApiManager.appelApiArray(urlFestivalsProgrammes,
                                  this, new CallbackApi<JSONArray>() {
-
             @Override
             public void onReponsePositive(JSONArray reponseApi) {
                 listeFestivals.clear();
@@ -387,10 +398,12 @@ public class Festivals extends AppCompatActivity implements
     private void chargerFestivalsFavoris() {
         afficherMessageErreur(getString(R.string.festivals_chargement_donnees));
 
-        ApiManager.appelApiArray(urlFestivalsFavoris, this, new CallbackApi<JSONArray>() {
+        ApiManager.appelApiArray(urlFestivalsFavoris, this,
+                                 new CallbackApi<JSONArray>() {
             @Override
             public void onReponsePositive(JSONArray reponseApi) {
                 listeFestivals.clear();
+
                 try {
                     festivalsStockes.clear();
                     JSONArray festivals = reponseApi;

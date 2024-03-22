@@ -168,6 +168,8 @@ public class ApiManager {
                 messageErreur = String.format(ERR_MAUVAISE_REQUETE, error, details);
 
                 resultat.onReponseErreur(messageErreur);
+            } else {
+                System.out.println("Erreur de volley : " + erreur);
             }
         } catch (Exception e) {
             System.out.println("Erreur de volley : " + erreur);
