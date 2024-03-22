@@ -263,31 +263,13 @@ public class Festivals extends AppCompatActivity implements
                 boutonFavori.setImageResource(R.drawable.etoile_inactive);
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
-                ApiManager.appelApiObjet(urlSupprimerFavori,this,
-                                         new CallbackApi<JSONObject>() {
-                    @Override
-                    public void onReponsePositive(JSONObject reponseApi) {
-                        retirerFavori(position);
-                    }
-
-                    @Override
-                    public void onReponseErreur(String erreur) {}
-                }, donnees, Request.Method.POST);
+                ApiManager.appelApiSansReponse(urlSupprimerFavori,this, donnees, Request.Method.POST);
             } else {
                 message = String.format(FESTIVAL_AJOUTE, idFestivalClique);
                 boutonFavori.setImageResource(R.drawable.etoile_active);
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
-                ApiManager.appelApiObjet(urlAjouterFavori,this,
-                                         new CallbackApi<JSONObject>() {
-                    @Override
-                    public void onReponsePositive(JSONObject reponseApi) {
-                        ajouterFavori(position);
-                    }
-
-                    @Override
-                    public void onReponseErreur(String erreur) {}
-                }, donnees, Request.Method.POST);
+                ApiManager.appelApiSansReponse(urlAjouterFavori,this, donnees, Request.Method.POST);
             }
         } catch (JSONException e) {
             Toast.makeText(this, "Une erreur est survenue",

@@ -145,6 +145,34 @@ public class ApiManager {
         }
     }
 
+    public static void appelApiSansReponse(String url, AppCompatActivity app,
+                                    JSONObject donnees,
+                                    int methode) {
+        JsonObjectRequest requeteVolley;
+
+        if (reseauDisponible(app)) {
+            requeteVolley = new JsonObjectRequest(methode, url, donnees,
+                    null,
+                    null
+            ) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    if (cleApi != null)
+                        params.put("APIKEY", cleApi);
+                    return params;
+                }
+            };
+
+            requeteVolley.setRetryPolicy(new DefaultRetryPolicy(
+                    TIMEOUT_MS,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+            getFileRequete(app).add(requeteVolley);
+        }
+    }
+
     /**
      * Gestion d'une erreur volley d'appel à l'API.
      * @param erreur L'erreur volley.
