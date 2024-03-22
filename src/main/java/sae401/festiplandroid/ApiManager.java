@@ -145,6 +145,16 @@ public class ApiManager {
         }
     }
 
+    /**
+     * Appel d'API à partir de l'url. Aucune réponse n'est attendue de la part de cette méthode. 
+     * Utiliser cette méthode que pour faire des insertions ou des suppressions de données.
+     *
+     * @param url L'url de l'API.
+     * @param app L'activité appelante.
+     * @param resultat L'interface de réponse à l'API.
+     * @param donnees Les données à envoyer à l'API.
+     * @param methode La méthode de la requête.
+     */
     public static void appelApiSansReponse(String url, AppCompatActivity app,
                                     JSONObject donnees,
                                     int methode) {
