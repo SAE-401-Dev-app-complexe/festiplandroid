@@ -81,7 +81,7 @@ public class DetailsFestival extends AppCompatActivity  {
                 try {
                     JSONObject festival = reponseApi.getJSONObject(0);
                     String titreFestival =  festival.getString("titre");
-                    String datesFestival = "Du "+ festival.getString("dateDebut")+ " au " +festival.getString("dateFin");
+                    String datesFestival = "Du "+ festival.getString("dateDebut")+ "\nau " +festival.getString("dateFin");
                     String descriptionFestival = festival.getString("description");
                     titre.setText(titreFestival);
                     dates.setText(datesFestival);

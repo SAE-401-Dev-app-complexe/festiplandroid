@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,12 @@ import java.util.ArrayList;
 
 public class Festivals extends AppCompatActivity implements
         AdapterView.OnItemClickListener {
+
+    private final String AUCUN_FESTIVAL_PROGRAMME
+    = "Aucun festival n'est programmé actuellement.";
+
+    private final String AUCUN_FESTIVAL_FAVORI
+    = "Vous n'avez ajouté aucun festival à vos favoris.";
 
     private final String FESTIVAL_AJOUTE = "Festival n°%d ajouté aux favoris";
 
@@ -64,6 +71,8 @@ public class Festivals extends AppCompatActivity implements
 
     private TextView chargementDonnees;
 
+    private TableRow boutons;
+
     private String typeFestivals;
 
     /**
@@ -96,9 +105,10 @@ public class Festivals extends AppCompatActivity implements
         barre.setBackgroundDrawable(getResources().getDrawable(R.drawable.fond_barre_action));
 
         chargementDonnees = findViewById(R.id.message_chargement);
+        boutons = findViewById(R.id.boutons);
+
         festivalsRecyclerView = findViewById(R.id.liste_festivals);
         initialiseListeFestivals();
-
 
         LinearLayoutManager gestionnaireLineaire = new LinearLayoutManager(this);
         festivalsRecyclerView.setLayoutManager(gestionnaireLineaire);
@@ -218,7 +228,7 @@ public class Festivals extends AppCompatActivity implements
         pageDetails.putExtra("idFestival", festival.getIdFestival());
         pageDetails.putExtra("titre", festival.getTitre());
         pageDetails.putExtra("description", festival.getDescription());
-        pageDetails.putExtra("dates", "Du "+ festival.getDateDeb() + " au " + festival.getDateFin());
+        pageDetails.putExtra("dates", "Du "+ festival.getDateDeb() + "\nau " + festival.getDateFin());
 
         lanceurFestivalsDetails.launch(pageDetails);
     }
@@ -285,11 +295,14 @@ public class Festivals extends AppCompatActivity implements
         listeFestivals.clear();
         // Permet de demander à l'adapteur de d'ajouter les données qui vont être ajoutés
         adaptateur.notifyDataSetChanged();
+
         try {
             int pageDebut = (page-1) * NOMBRE_FESTIVAL_PAGE ;
             int pageFin = pageDebut + NOMBRE_FESTIVAL_PAGE;
+
             idFestivals.clear();
             System.out.println(festivalsStockes.size());
+
             //listeFestivals.clear();
             for (int num = pageDebut; num < festivalsStockes.size() && num < pageFin; num++) {
                 JSONObject festivalJson = festivalsStockes.get(num);
@@ -297,21 +310,19 @@ public class Festivals extends AppCompatActivity implements
                 String titre = festivalJson.getString("titre");
                 String description = festivalJson.getString("description");
                 boolean favoris;
-                if (festivalJson.getInt("favoris") == 1) {
-                    favoris = true;
-                } else {
-                    favoris = false;
-                }
-                String dateDeb= festivalJson.getString("dateDebut");
-                String dateFin= festivalJson.getString("dateFin");
-                idFestivals.add(idFestival);
-                listeFestivals.add(new InfosFestival(titre, R.drawable.default_illustration,idFestival,favoris,dateDeb,dateFin,description));
 
+                favoris = festivalJson.getInt("favoris") == 1;
+
+                String dateDeb = festivalJson.getString("dateDebut");
+                String dateFin = festivalJson.getString("dateFin");
+
+                idFestivals.add(idFestival);
+                listeFestivals.add(new InfosFestival(titre, R.drawable.default_illustration,
+                                                     idFestival, favoris, dateDeb,
+                                                     dateFin,description));
             }
-            chargementDonnees.setVisibility(View.INVISIBLE);
         } catch (JSONException e) { System.err.println(e);}
     }
-
 
     /**
      * Méthode pour initialiser la liste des festivals
@@ -333,7 +344,7 @@ public class Festivals extends AppCompatActivity implements
      * charge les festivals Programmes par un appel API
      */
     private void chargerFestivalsProgrammes()  {
-        chargementDonnees.setVisibility(View.VISIBLE);
+        afficherMessageErreur(getString(R.string.festivals_chargement_donnees));
 
         ApiManager.appelApiArray(urlFestivalsProgrammes,
                                  this, new CallbackApi<JSONArray>() {
@@ -344,13 +355,23 @@ public class Festivals extends AppCompatActivity implements
                 try {
                     festivalsStockes.clear();
                     JSONArray festivals = reponseApi;
-                    for (int i = 0; i < festivals.length(); i++) {
-                        JSONObject festival = festivals.getJSONObject(i);
-                        festivalsStockes.add(festival);
+
+                    if (festivals.length() == 0) {
+                        afficherMessageErreur(AUCUN_FESTIVAL_PROGRAMME);
+                    } else {
+                        affichageNominal();
+
+                        for (int i = 0; i < festivals.length(); i++) {
+                            JSONObject festival = festivals.getJSONObject(i);
+                            festivalsStockes.add(festival);
+                        }
                     }
+
                     page = 1;
                     afficherPage();
-                } catch (JSONException e) { }
+                } catch (JSONException e) {
+                    chargementDonnees.setText(AUCUN_FESTIVAL_PROGRAMME);
+                }
             }
 
             @Override
@@ -364,7 +385,8 @@ public class Festivals extends AppCompatActivity implements
      * Charge les festivals favoris par un appel API.
      */
     private void chargerFestivalsFavoris() {
-        chargementDonnees.setVisibility(View.VISIBLE);
+        afficherMessageErreur(getString(R.string.festivals_chargement_donnees));
+
         ApiManager.appelApiArray(urlFestivalsFavoris, this, new CallbackApi<JSONArray>() {
             @Override
             public void onReponsePositive(JSONArray reponseApi) {
@@ -372,16 +394,46 @@ public class Festivals extends AppCompatActivity implements
                 try {
                     festivalsStockes.clear();
                     JSONArray festivals = reponseApi;
-                    for (int i = 0; i < festivals.length(); i++) {
-                        JSONObject festival = festivals.getJSONObject(i);
-                        festivalsStockes.add(festival);
+
+                    if (festivals.length() == 0) {
+                        afficherMessageErreur(AUCUN_FESTIVAL_FAVORI);
+                    } else {
+                        affichageNominal();
+
+                        for (int i = 0; i < festivals.length(); i++) {
+                            JSONObject festival = festivals.getJSONObject(i);
+                            festivalsStockes.add(festival);
+                        }
                     }
+
                     page = 1;
                     afficherPage();
-                } catch (JSONException e) { }
+                } catch (JSONException e) {
+                    chargementDonnees.setText(AUCUN_FESTIVAL_FAVORI);
+                }
             }
             @Override
             public void onReponseErreur(String erreur) { }
         },null, Request.Method.GET);
+    }
+
+    /**
+     * Affiche un message d'erreur en haut de la page.
+     * @param message Le message d'erreur à afficher.
+     */
+    private void afficherMessageErreur(String message) {
+        chargementDonnees.setText(message);
+        chargementDonnees.setVisibility(View.VISIBLE);
+        festivalsRecyclerView.setVisibility(View.GONE);
+        boutons.setVisibility(View.GONE);
+    }
+
+    /**
+     * Affiche la liste des festivals, les boutons et cache le message d'erreur.
+     */
+    private void affichageNominal() {
+        chargementDonnees.setVisibility(View.GONE);
+        festivalsRecyclerView.setVisibility(View.VISIBLE);
+        boutons.setVisibility(View.VISIBLE);
     }
 }

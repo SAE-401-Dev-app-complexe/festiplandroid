@@ -75,7 +75,7 @@ public class FestivalsViewHolder extends RecyclerView.ViewHolder {
             Drawable image = ContextCompat.getDrawable(itemView.getContext(),R.drawable.etoile_inactive);
             boutonFavori.setImageDrawable(image);
         }
-        dates.setText("Du " + festival.getDateDeb() + " au " + festival.getDateFin());
+        dates.setText("Du " + festival.getDateDeb() + "\nau " + festival.getDateFin());
 
 
     }
