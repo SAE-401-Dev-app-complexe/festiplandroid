@@ -17,9 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,17 +36,17 @@ public class Festivals extends AppCompatActivity implements
 
     private final String FESTIVAL_RETIRE = "Festival n°%d retiré des favoris";
 
+    private final int NOMBRE_FESTIVAL_PAGE = 5;
+
     private FestivalsAdapter adaptateur;
 
-    private final String URL_GET_FAVORIS = getString(R.string.lien_api) + "favoris";
+    private String urlFestivalsProgrammes;
 
-    private final String URL_AJOUTER_FAVORIS = getString(R.string.lien_api) + "ajouterFavoris";
+    private String urlFestivalsFavoris;
 
-    private final String URL_SUPPRIMER_FAVORIS = getString(R.string.lien_api) + "supprimerFavoris";
+    private String urlAjouterFavoris;
 
-    private final String URL_FESTIVAL_PROGRAMMES = getString(R.string.lien_api) + "festivals";
-
-    private final int NOMBRE_FESTIVAL_PAGE = 5;
+    private String urlSupprimerFavoris;
 
     public enum TYPE_FESTIVALS {;
         public static final String PROGRAMMES = "Programmes";
@@ -64,7 +62,7 @@ public class Festivals extends AppCompatActivity implements
 
     private int page;
 
-    private TextView chargementDonnes;
+    private TextView chargementDonnees;
 
     private String typeFestivals;
 
@@ -84,7 +82,12 @@ public class Festivals extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.festivals);
-        //ApiManager.setCleApi("19b7eaf42fd7d743a252");
+
+        urlFestivalsProgrammes = getString(R.string.lien_api) + "festivals";
+        urlFestivalsFavoris = getString(R.string.lien_api) + "favoris";
+        urlAjouterFavoris = getString(R.string.lien_api) + "ajouterFavoris";
+        urlSupprimerFavoris = getString(R.string.lien_api) + "supprimerFavoris";
+
         ActionBar barre = getSupportActionBar();
 
         barre.setDisplayShowTitleEnabled(false);
@@ -92,7 +95,7 @@ public class Festivals extends AppCompatActivity implements
         barre.setCustomView(R.layout.action_bar);
         barre.setBackgroundDrawable(getResources().getDrawable(R.drawable.fond_barre_action));
 
-        chargementDonnes = findViewById(R.id.chargement);
+        chargementDonnees = findViewById(R.id.message_chargement);
         festivalsRecyclerView = findViewById(R.id.liste_festivals);
         initialiseListeFestivals();
 
@@ -234,6 +237,7 @@ public class Festivals extends AppCompatActivity implements
         int idFestival = idFestival = (Integer) boutonFavori.getTag();
         JSONObject donnees = null;
         System.out.println(idFestival);
+
         try {
             donnees = new JSONObject().put("idFestival", idFestival);
             System.out.println(donnees);
@@ -249,7 +253,8 @@ public class Festivals extends AppCompatActivity implements
             message = String.format(FESTIVAL_RETIRE, idFestival);
             boutonFavori.setImageResource(R.drawable.etoile_inactive);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-            ApiManager.appelApiObjet(URL_SUPPRIMER_FAVORIS,this, new CallbackApi<JSONObject>() {
+
+            ApiManager.appelApiObjet(urlSupprimerFavoris,this, new CallbackApi<JSONObject>() {
                 @Override
                 public void onReponsePositive(JSONObject reponseApi) {}
 
@@ -257,14 +262,13 @@ public class Festivals extends AppCompatActivity implements
                 public void onReponseErreur(String erreur) {}
             }, donnees, Request.Method.DELETE);
 
-
             // TODO appel API avec l'id du festival (pas besoin de la clé API qui désigne l'user car déjà stockée en statique dans ApiManager)
         } else {
             message = String.format(FESTIVAL_AJOUTE, idFestival);
             boutonFavori.setImageResource(R.drawable.etoile_active);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
-            ApiManager.appelApiObjet(URL_AJOUTER_FAVORIS,this, new CallbackApi<JSONObject>() {
+            ApiManager.appelApiObjet(urlAjouterFavoris,this, new CallbackApi<JSONObject>() {
                 @Override
                 public void onReponsePositive(JSONObject reponseApi) {}
 
@@ -293,7 +297,7 @@ public class Festivals extends AppCompatActivity implements
                 String titre = festivalJson.getString("titre");
                 String description = festivalJson.getString("description");
                 boolean favoris;
-                if(festivalJson.getInt("favoris") == 1) {
+                if (festivalJson.getInt("favoris") == 1) {
                     favoris = true;
                 } else {
                     favoris = false;
@@ -304,7 +308,7 @@ public class Festivals extends AppCompatActivity implements
                 listeFestivals.add(new InfosFestival(titre, R.drawable.default_illustration,idFestival,favoris,dateDeb,dateFin,description));
 
             }
-            chargementDonnes.setVisibility(View.INVISIBLE);
+            chargementDonnees.setVisibility(View.INVISIBLE);
         } catch (JSONException e) { System.err.println(e);}
     }
 
@@ -326,36 +330,12 @@ public class Festivals extends AppCompatActivity implements
     }
 
     /**
-     * Charge les festivals favoris par un appel API.
-     */
-    private void chargerFestivalsFavoris() {
-        chargementDonnes.setVisibility(View.VISIBLE);
-        ApiManager.appelApiArray(URL_GET_FAVORIS, this, new CallbackApi<JSONArray>() {
-            @Override
-            public void onReponsePositive(JSONArray reponseApi) {
-                listeFestivals.clear();
-                try {
-                    festivalsStockes.clear();
-                    JSONArray festivals = reponseApi;
-                    for (int i = 0; i < festivals.length(); i++) {
-                        JSONObject festival = festivals.getJSONObject(i);
-                        festivalsStockes.add(festival);
-                    }
-                    page = 1;
-                    afficherPage();
-                } catch (JSONException e) { }
-            }
-            @Override
-            public void onReponseErreur(String erreur) { }
-        },null, Request.Method.GET);
-    }
-
-    /**
      * charge les festivals Programmes par un appel API
      */
     private void chargerFestivalsProgrammes()  {
-        chargementDonnes.setVisibility(View.VISIBLE);
-        ApiManager.appelApiArray(URL_FESTIVAL_PROGRAMMES,
+        chargementDonnees.setVisibility(View.VISIBLE);
+
+        ApiManager.appelApiArray(urlFestivalsProgrammes,
                                  this, new CallbackApi<JSONArray>() {
 
             @Override
@@ -373,6 +353,33 @@ public class Festivals extends AppCompatActivity implements
                 } catch (JSONException e) { }
             }
 
+            @Override
+            public void onReponseErreur(String erreur) {
+                chargementDonnees.setText(erreur);
+            }
+        },null, Request.Method.GET);
+    }
+
+    /**
+     * Charge les festivals favoris par un appel API.
+     */
+    private void chargerFestivalsFavoris() {
+        chargementDonnees.setVisibility(View.VISIBLE);
+        ApiManager.appelApiArray(urlFestivalsFavoris, this, new CallbackApi<JSONArray>() {
+            @Override
+            public void onReponsePositive(JSONArray reponseApi) {
+                listeFestivals.clear();
+                try {
+                    festivalsStockes.clear();
+                    JSONArray festivals = reponseApi;
+                    for (int i = 0; i < festivals.length(); i++) {
+                        JSONObject festival = festivals.getJSONObject(i);
+                        festivalsStockes.add(festival);
+                    }
+                    page = 1;
+                    afficherPage();
+                } catch (JSONException e) { }
+            }
             @Override
             public void onReponseErreur(String erreur) { }
         },null, Request.Method.GET);
