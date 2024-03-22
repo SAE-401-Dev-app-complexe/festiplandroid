@@ -20,9 +20,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +36,7 @@ import java.util.Map;
  */
 public class ApiManager {
 
-    public final static int TIMEOUT_MS = 10000;
+    public final static int TIMEOUT_MS = 5000;
 
     public final static String AUCUNE_CONNEXION
     = "Aucune connexion internet n'est détectée !";
@@ -78,7 +78,6 @@ public class ApiManager {
     public static void appelApiObjet(String url, AppCompatActivity app,
                                      CallbackApi resultat, JSONObject donnees,
                                      int methode) {
-        System.out.println(cleApi);
         JsonObjectRequest requeteVolley;
 
         if (reseauDisponible(app)) {
@@ -90,7 +89,7 @@ public class ApiManager {
                 public Map<String, String> getHeaders() {
                     Map<String, String> params = new HashMap<String, String>();
                     if (cleApi != null)
-                        params.put("APIKEY", cleApi);
+                        params.put("APIKEY", "cleApiPrivee");// TODO modifier cleApi);
                     return params;
                 }
             };
@@ -152,25 +151,27 @@ public class ApiManager {
      * @param resultat L'interface de réponse à l'API.
      */
     private static void gestionErreur(VolleyError erreur, CallbackApi resultat) {
-        System.out.println(cleApi);
         boolean erreurPrevue = false;
         String messageErreur;
 
         try {
-            String reponse = new String(erreur.networkResponse.data, "utf-8");
-            System.out.println("Erreur renvoyée par l'API : " + reponse);
+            if (erreur.networkResponse != null) {
+                String reponse = new String(erreur.networkResponse.data, StandardCharsets.UTF_8);
+                System.out.println("Erreur renvoyée par l'API : " + reponse);
 
-            JSONObject donnees = new JSONObject(reponse);
+                JSONObject donnees = new JSONObject(reponse);
 
-            String error = donnees.getString("error");
-            String details = donnees.getString("details");
+                String error = donnees.getString("error");
+                String details = donnees.getString("details");
 
-            erreurPrevue = true;
-            messageErreur = String.format(ERR_MAUVAISE_REQUETE, error, details);
+                erreurPrevue = true;
+                messageErreur = String.format(ERR_MAUVAISE_REQUETE, error, details);
 
-            resultat.onReponseErreur(messageErreur);
+                resultat.onReponseErreur(messageErreur);
+            }
         } catch (Exception e) {
             System.out.println("Erreur de volley : " + erreur);
+            System.out.println(e);
         }
 
         if (!erreurPrevue)
@@ -190,10 +191,8 @@ public class ApiManager {
 
             NetworkInfo informationReseau = gestionnaireConnexion.getActiveNetworkInfo();
 
-            if (informationReseau == null || !informationReseau.isConnected()) {
-                return false;
-            }
-            return true;
+            return informationReseau == null || !informationReseau.isConnected()
+                   ? false : true;
         } catch (Exception e) {
             return false;
         }
