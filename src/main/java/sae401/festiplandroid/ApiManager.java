@@ -151,7 +151,6 @@ public class ApiManager {
      *
      * @param url L'url de l'API.
      * @param app L'activité appelante.
-     * @param resultat L'interface de réponse à l'API.
      * @param donnees Les données à envoyer à l'API.
      * @param methode La méthode de la requête.
      */

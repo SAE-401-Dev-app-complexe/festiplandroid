@@ -168,7 +168,6 @@ public class Festivals extends AppCompatActivity implements
     private void deconnecter() {
         Intent pageConnexion = new Intent(this, Connexion.class);
         startActivity(pageConnexion);
-        // TODO faire en sorte qu'on ne puisse plus faire retour (via bouton tel) après la déconnexion
     }
 
     // Non nécessaires les informations sont gardés aprés changement de page
@@ -299,7 +298,7 @@ public class Festivals extends AppCompatActivity implements
     public void afficherPage()  {
         listeFestivals.clear();
 
-        // Permet de demander à l'adapteur de d'ajouter
+        // Permet de demander à l'adapteur d'ajouter
         // les données qui vont être ajoutés
         adaptateur.notifyDataSetChanged();
 
@@ -326,7 +325,7 @@ public class Festivals extends AppCompatActivity implements
                     favoris = true;
                 }
 
-                idFestivals.add(idFestival);
+                idFestivals.add(idFestival); // Potentiellement inutile
                 listeFestivals.add(new InfosFestival(titre, R.drawable.default_illustration,
                                                      idFestival, favoris, dateDeb,
                                                      dateFin,description));
