@@ -42,8 +42,8 @@ public class ApiManager {
     = "Aucune connexion internet n'est détectée !";
 
     public final static String CONNEXION_ECHOUEE
-    = "La connexion à l'API a échoué !\nVeuillez vérifier votre connexion"
-      + " internet ou réessayer plus tard.";
+    = "La connexion à l'API a échoué !\nVérifiez votre connexion"
+      + " internet ou réessayez plus tard.";
 
     public final static String ERR_MAUVAISE_REQUETE
     = "La requête à l'API est incorrecte !\nLes développeurs règleront ce soucis" +
@@ -148,21 +148,18 @@ public class ApiManager {
     /**
      * Appel d'API à partir de l'url. Aucune réponse n'est attendue de la part de cette méthode. 
      * Utiliser cette méthode que pour faire des insertions ou des suppressions de données.
-     *
      * @param url L'url de l'API.
      * @param app L'activité appelante.
      * @param donnees Les données à envoyer à l'API.
      * @param methode La méthode de la requête.
      */
     public static void appelApiSansReponse(String url, AppCompatActivity app,
-                                    JSONObject donnees,
-                                    int methode) {
+                                           JSONObject donnees, int methode) {
         JsonObjectRequest requeteVolley;
 
         if (reseauDisponible(app)) {
-            requeteVolley = new JsonObjectRequest(methode, url, donnees,
-                    null,
-                    null
+            requeteVolley = new JsonObjectRequest(methode, url,
+                donnees, null, null
             ) {
                 @Override
                 public Map<String, String> getHeaders() {
@@ -188,13 +185,16 @@ public class ApiManager {
      * @param resultat L'interface de réponse à l'API.
      */
     private static void gestionErreur(VolleyError erreur, CallbackApi resultat) {
+        final String ERREUR_API = "Erreur renvoyée par l'API : ";
+
         boolean erreurPrevue = false;
+
         String messageErreur;
 
         try {
             if (erreur.networkResponse != null) {
                 String reponse = new String(erreur.networkResponse.data, StandardCharsets.UTF_8);
-                System.out.println("Erreur renvoyée par l'API : " + reponse);
+                System.out.println(ERREUR_API + reponse);
 
                 JSONObject donnees = new JSONObject(reponse);
 
@@ -211,7 +211,7 @@ public class ApiManager {
             }
         } catch (Exception e) {
             System.out.println("Erreur de volley : " + erreur);
-            System.out.println(e);
+            e.printStackTrace();
         }
 
         if (!erreurPrevue)
@@ -220,7 +220,6 @@ public class ApiManager {
 
     /**
      * Vérifie qu'une connexion internet est disponible.
-     *
      * @param app L'activité appelante.
      * @return true si une connexion internet est disponible sinon false.
      */
@@ -236,41 +235,6 @@ public class ApiManager {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    public static JSONArray getDonnees(String url, AppCompatActivity app) {
-        /*appelApiArray(url,
-                                 app, new CallbackApi<JSONArray>() {
-            @Override
-            public void onReponsePositive(JSONArray reponseApi) {
-                listeFestivals.clear();
-                try {
-                    festivalsStockes.clear();
-                    JSONArray festivals = reponseApi;
-
-                    if (festivals.length() == 0) {
-                        afficherMessageErreur(AUCUN_FESTIVAL_PROGRAMME);
-                    } else {
-                        affichageNominal();
-
-                        for (int i = 0; i < festivals.length(); i++) {
-                            JSONObject festival = festivals.getJSONObject(i);
-                            festivalsStockes.add(festival);
-                        }
-                    }
-
-                    return festivals;
-                } catch (JSONException e) {
-                    
-                }
-            }
-
-            @Override
-            public void onReponseErreur(String erreur) {
-                
-            }
-        }, null, Request.Method.GET);*/
-        return null;
     }
 
     /**
