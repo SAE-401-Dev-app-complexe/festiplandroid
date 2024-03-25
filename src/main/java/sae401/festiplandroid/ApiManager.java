@@ -201,10 +201,11 @@ public class ApiManager {
                 String error = donnees.getString("error");
                 String details = donnees.getString("details");
 
-                erreurPrevue = true;
                 messageErreur = String.format(ERR_MAUVAISE_REQUETE, error, details);
 
                 resultat.onReponseErreur(messageErreur);
+
+                erreurPrevue = true;
             } else {
                 System.out.println("Erreur de volley : " + erreur);
             }
@@ -238,7 +239,7 @@ public class ApiManager {
     }
 
     public static JSONArray getDonnees(String url, AppCompatActivity app) {
-        appelApiArray(urlFestivalsProgrammes,
+        /*appelApiArray(url,
                                  app, new CallbackApi<JSONArray>() {
             @Override
             public void onReponsePositive(JSONArray reponseApi) {
@@ -268,7 +269,8 @@ public class ApiManager {
             public void onReponseErreur(String erreur) {
                 
             }
-        },null, Request.Method.GET);
+        },null, Request.Method.GET);*/
+        return null;
     }
 
     /**

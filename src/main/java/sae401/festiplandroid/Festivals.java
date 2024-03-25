@@ -295,11 +295,11 @@ public class Festivals extends AppCompatActivity implements
     /**
      * Affiche les festivals de la page actuelle.
      */
-    public void afficherPage()  {
+    public void afficherPage() {
         listeFestivals.clear();
 
         // Permet de demander à l'adapteur d'ajouter
-        // les données qui vont être ajoutés
+        // les données qui vont être ajoutées
         adaptateur.notifyDataSetChanged();
 
         try {
@@ -362,13 +362,13 @@ public class Festivals extends AppCompatActivity implements
                     page = 1;
                     afficherPage();
                 } catch (JSONException e) {
-                    chargementDonnees.setText(AUCUN_FESTIVAL_PROGRAMME);
+                    afficherMessageErreur(AUCUN_FESTIVAL_PROGRAMME);
                 }
             }
 
             @Override
             public void onReponseErreur(String erreur) {
-                chargementDonnees.setText(erreur);
+                afficherMessageErreur(erreur);
             }
         },null, Request.Method.GET);
     }
@@ -403,11 +403,13 @@ public class Festivals extends AppCompatActivity implements
                     page = 1;
                     afficherPage();
                 } catch (JSONException e) {
-                    chargementDonnees.setText(AUCUN_FESTIVAL_FAVORI);
+                    afficherMessageErreur(AUCUN_FESTIVAL_FAVORI);
                 }
             }
             @Override
-            public void onReponseErreur(String erreur) { }
+            public void onReponseErreur(String erreur) {
+                afficherMessageErreur(erreur);
+            }
         },null, Request.Method.GET);
     }
 
