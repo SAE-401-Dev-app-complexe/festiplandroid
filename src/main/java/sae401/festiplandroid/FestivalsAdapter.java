@@ -52,10 +52,9 @@ public class FestivalsAdapter extends RecyclerView.Adapter<FestivalsViewHolder> 
      */
     @Override
     public FestivalsViewHolder onCreateViewHolder(ViewGroup viewGroup, int itemType) {
-        System.out.println("imtemtyê"+itemType);
         View view = LayoutInflater.from(
             viewGroup.getContext()).inflate(R.layout.item_liste,
-            viewGroup,false);
+            viewGroup, false);
         return new FestivalsViewHolder(view);
     }
 

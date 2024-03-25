@@ -8,6 +8,7 @@
     <string name="connexion_placeholder_mdp">Mot de passe</string>
 
     <string name="connexion_button">Connexion</string>
+
     <!-- ATTENTION : remplacer ip ci-dessous par IPV4 locale (ipconfig dans cmd) -->
     <string name="lien_api">http://10.0.2.2:80/API/testAPISAE/API/</string>
 
@@ -18,5 +19,10 @@
     <string name="festivals_placeholder_dates">Du 00/00/0000\nau 00/00/0000</string>
     <string name="festivals_description_image">Image représentant le festival affiché</string>
 
+    <string name="festival_ajoute_favoris">Festival n°%d ajouté aux favoris</string>
+    <string name="festival_retire_favoris">Festival n°%d retiré des favoris</string>
+
     <string name="festivals_chargement_donnees">Chargement des festivals</string>
+
+    <string name="erreur_survenue">Une erreur est survenue</string>
 </resources>

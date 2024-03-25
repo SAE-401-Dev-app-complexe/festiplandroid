@@ -269,7 +269,7 @@ public class ApiManager {
             public void onReponseErreur(String erreur) {
                 
             }
-        },null, Request.Method.GET);*/
+        }, null, Request.Method.GET);*/
         return null;
     }
 

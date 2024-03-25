@@ -62,7 +62,7 @@ public class DetailsFestival extends AppCompatActivity  {
        /* JSONArray donnees = null;
         try {
             donnees = new JSONArray();
-            donnees.put(new JSONObject().put("idFestival",idFestival));
+            donnees.put(new JSONObject().put("idFestival", idFestival));
             System.out.println(donnees);
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -89,7 +89,7 @@ public class DetailsFestival extends AppCompatActivity  {
             public void onReponseErreur(String erreur) {
 
             }
-        },donnees, Request.Method.POST);*/
+        }, donnees, Request.Method.POST);*/
 
 
     }
