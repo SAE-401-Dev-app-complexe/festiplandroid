@@ -35,14 +35,17 @@
             android:gravity="center"
             android:layout_marginTop="10dp">
             <Button
+                android:id="@+id/bouton_precedent"
                 style="@style/festivals_bouton"
                 android:text="Page précédente"
                 android:layout_marginRight="15dp"
                 android:onClick="pagePrecedente" />
 
             <Button
+                android:id="@+id/bouton_suivant"
                 style="@style/festivals_bouton"
                 android:text="Page suivante"
+                android:visibility="invisible"
                 android:layout_marginLeft="15dp"
                 android:onClick="pageSuivante" />
         </TableRow>
