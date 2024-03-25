@@ -153,7 +153,7 @@ public class Connexion extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (ApiManager.getCle() != null) {
+        if (false) {
             super.onBackPressed();
         }
     }
