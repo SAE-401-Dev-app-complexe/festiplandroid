@@ -4,6 +4,8 @@
  */
 package sae401.festiplandroid;
 
+import java.io.Serializable;
+
 /**
  * Classe modélisant les informations relatives à un festival
  *
@@ -12,16 +14,19 @@ package sae401.festiplandroid;
  * @author Loïc Faugières
  * @author Simon Guiraud
  */
-public class InfosFestival {
+public class InfosFestival implements Serializable {
 
-    private String description;
+    public final static String CLE_FESTIVAL = "festivalCle";
+
+    private int idFestival;
+
     /** Titre du festival */
     private String titre;
 
-    /** Identifiant de l'illustration, au sein des ressources de type Drawable */
-    private int illustration;
+    private String description;
 
-    private int idFestival;
+    /** Lien de l'illustration ou identifiant de celle par défaut */
+    private int illustration;
 
     private boolean favori;
 
