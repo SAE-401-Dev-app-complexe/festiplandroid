@@ -102,7 +102,7 @@ public class Connexion extends AppCompatActivity {
             ApiManager.appelApiObjet(url, this, new CallbackApi<JSONObject>() {
                 @Override
                 public void onReponsePositive(JSONObject reponseApi) {
-                    String cleApi = null;
+                    String cleApi = "null";
                     try {
                         cleApi = reponseApi.getString("cleApi");
                     } catch (JSONException e) {
@@ -151,6 +151,10 @@ public class Connexion extends AppCompatActivity {
         }
     }
 
+    /**
+     * Solution temporaire pour bloquer le bouton retour.
+     * Retirer "super.onBackPressed()" renvoie une erreur.
+     */
     @Override
     public void onBackPressed() {
         if (false) {

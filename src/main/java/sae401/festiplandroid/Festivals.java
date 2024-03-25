@@ -1,5 +1,5 @@
 /*
- * Festivals.java                                                   25 mar. 2024
+ * Festivals.java                                        25 mar. 2024
  * IUT de Rodez, pas de copyright ni de "copyleft".
  */
 package sae401.festiplandroid;
@@ -34,6 +34,11 @@ import java.util.Locale;
 
 /**
  * Gestion de l'affichage des festivals programmés et favoris.
+ *
+ * @author Enzo  Cluzel
+ * @author Lucas Descriaud
+ * @author Loïc  Faugières
+ * @author Simon Guiraud
  */
 public class Festivals extends AppCompatActivity {
 
@@ -174,7 +179,6 @@ public class Festivals extends AppCompatActivity {
             chargerFestivals(urlFestivalsFavoris, AUCUN_FESTIVAL_FAVORI);
             typeFestivals = TYPE_FESTIVALS.FAVORIS;
         } else if (optionChoisie == R.id.deconnexion) {
-            ApiManager.setCleApi(null);
             deconnecter();
         }
 
@@ -185,6 +189,7 @@ public class Festivals extends AppCompatActivity {
      * Déconnecte l'utilisateur et le redirige vers la page de connexion.
      */
     private void deconnecter() {
+        ApiManager.setCleApi(null);
         Intent pageConnexion = new Intent(this, Connexion.class);
         startActivity(pageConnexion);
     }
@@ -223,11 +228,7 @@ public class Festivals extends AppCompatActivity {
         Toast.makeText(this, "Festival n°" + festival.getIdFestival(),
                        Toast.LENGTH_SHORT).show();
 
-        pageDetails.putExtra("idFestival", festival.getIdFestival());
-        pageDetails.putExtra("titre", festival.getTitre());
-        pageDetails.putExtra("description", festival.getDescription());
-        pageDetails.putExtra("dates", "Du "+ festival.getDateDeb()
-                                            + "\nau " + festival.getDateFin());
+        pageDetails.putExtra(InfosFestival.CLE_FESTIVAL, festival);
 
         startActivity(pageDetails);
     }
@@ -261,29 +262,19 @@ public class Festivals extends AppCompatActivity {
                              R.drawable.etoile_active, null)
                 .getConstantState();
 
-            // Si l'étoile est active, on la désactive
+            // Si l'étoile est active, on retire le festival des favoris
             if (boutonFavori.getDrawable().getConstantState().equals(etoileActive)) {
-                boutonFavori.setImageResource(R.drawable.etoile_inactive);
                 message = String.format(Locale.FRANCE,
                                         getString(R.string.festival_retire_favoris),
                                         idFestivalClique);
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
-                ApiManager.appelApiSansReponse(urlSupprimerFavori, this,
-                                               donnees, Request.Method.POST);
-
-                retirerFavori(position, typeFestivals.equals(TYPE_FESTIVALS.FAVORIS));
+                retirerFavori(position, donnees, boutonFavori, message);
             } else {
-                boutonFavori.setImageResource(R.drawable.etoile_active);
                 message = String.format(Locale.FRANCE,
                                         getString(R.string.festival_ajoute_favoris),
                                         idFestivalClique);
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
-                ApiManager.appelApiSansReponse(urlAjouterFavori, this,
-                                               donnees, Request.Method.POST);
-
-                ajouterFavori(position);
+                ajouterFavori(position, donnees, boutonFavori, message);
             }
 
             // Si la page est celle des favoris, on la réaffiche
@@ -306,11 +297,25 @@ public class Festivals extends AppCompatActivity {
     }
 
     /**
-     * Rend faux l'attribut "favori" d'un festival.
+     * Retire un festival des favoris, actualise l'affichage et envoie
+     * une requête à l'API.
      * @param positionFestival La position du festival dans la liste.
+     * @param donnees Les données à envoyer à l'API.
+     * @param boutonFavori Le bouton de favori du festival.
+     * @param message Le message toast à afficher.
      */
-    private void retirerFavori(int positionFestival, boolean pageFavoris) {
+    private void retirerFavori(int positionFestival, JSONObject donnees,
+                               ImageButton boutonFavori, String message) {
         int position;
+
+        boolean pageFavoris = typeFestivals.equals(TYPE_FESTIVALS.FAVORIS);
+
+        boutonFavori.setImageResource(R.drawable.etoile_inactive);
+
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+        ApiManager.appelApiSansReponse(urlSupprimerFavori, this,
+                                       donnees, Request.Method.POST);
 
         listeFestivals.get(positionFestival).setFavori(false);
 
@@ -331,11 +336,23 @@ public class Festivals extends AppCompatActivity {
     }
 
     /**
-     * Rend vrai l'attribut "favori" d'un festival.
+     * Ajoute un festival aux favoris, actualise l'affichage et envoie
+     * une requête à l'API.
      * @param positionFestival La position du festival dans la liste.
+     * @param donnees Les données à envoyer à l'API.
+     * @param boutonFavori Le bouton de favori du festival.
+     * @param message Le message toast à afficher.
      */
-    private void ajouterFavori(int positionFestival) {
+    private void ajouterFavori(int positionFestival, JSONObject donnees,
+                               ImageButton boutonFavori, String message) {
         int position;
+
+        boutonFavori.setImageResource(R.drawable.etoile_active);
+
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+        ApiManager.appelApiSansReponse(urlAjouterFavori, this,
+                                       donnees, Request.Method.POST);
 
         listeFestivals.get(positionFestival).setFavori(true);
 
