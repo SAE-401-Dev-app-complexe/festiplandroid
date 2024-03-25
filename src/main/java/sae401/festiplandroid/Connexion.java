@@ -16,7 +16,9 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 
-import org.json.JSONArray;
+import static sae401.festiplandroid.Festivals.CLE_TYPE_FESTIVAL;
+import static sae401.festiplandroid.Festivals.TYPE_FESTIVALS;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -130,7 +132,8 @@ public class Connexion extends AppCompatActivity {
         ApiManager.setCleApi(cleApi);
 
         Intent pageFestivals = new Intent(this, Festivals.class);
-        
+        pageFestivals.putExtra(CLE_TYPE_FESTIVAL, TYPE_FESTIVALS.PROGRAMMES);
+
         startActivity(pageFestivals);
     }
 

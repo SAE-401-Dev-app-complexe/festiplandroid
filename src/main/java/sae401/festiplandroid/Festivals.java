@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -42,6 +43,8 @@ public class Festivals extends AppCompatActivity implements
     private final String FESTIVAL_AJOUTE = "Festival n°%d ajouté aux favoris";
 
     private final String FESTIVAL_RETIRE = "Festival n°%d retiré des favoris";
+
+    public final static String CLE_TYPE_FESTIVAL = "typeFestivalCle";
 
     private final int NOMBRE_FESTIVAL_PAGE = 2;
 
@@ -72,6 +75,10 @@ public class Festivals extends AppCompatActivity implements
     private TextView chargementDonnees;
 
     private TableRow boutons;
+
+    private Button boutonSuivant;
+
+    private Button boutonPrecedent;
 
     private String typeFestivals;
 
@@ -106,14 +113,19 @@ public class Festivals extends AppCompatActivity implements
 
         chargementDonnees = findViewById(R.id.message_chargement);
         boutons = findViewById(R.id.boutons);
+        boutonPrecedent = findViewById(R.id.bouton_precedent);
+        boutonSuivant = findViewById(R.id.bouton_suivant);
 
         festivalsRecyclerView = findViewById(R.id.liste_festivals);
+
+        typeFestivals = getIntent().getStringExtra(CLE_TYPE_FESTIVAL);
+        page = 1;
+
         listeFestivals = new ArrayList<>();
 
         LinearLayoutManager gestionnaireLineaire = new LinearLayoutManager(this);
         festivalsRecyclerView.setLayoutManager(gestionnaireLineaire);
 
-        //festivalsRecyclerView.getLayoutManager().addView(R.);
         /*
          * On crée un adaptateur personnalisé et permettant de gérer spécifiquement
          * l'affichage des instances de type InfosFestival en tant que item de la liste.
@@ -122,16 +134,14 @@ public class Festivals extends AppCompatActivity implements
         adaptateur = new FestivalsAdapter(this, listeFestivals);
         festivalsRecyclerView.setAdapter(adaptateur);
 
-
-        // STUB
-        page = 1;
-        typeFestivals = TYPE_FESTIVALS.PROGRAMMES; // TODO modifier par donnée envoyée pour pouvoir choisir entre favoris et programmés via menu en haut de page
-        // FIN STUB
-
         festivalsStockes = new ArrayList<>();
         idFestivals = new ArrayList<>();
 
-        chargerFestivalsProgrammes();
+        if (typeFestivals.equals(TYPE_FESTIVALS.PROGRAMMES)) {
+            chargerFestivalsProgrammes();
+        } else {
+            chargerFestivalsFavoris();
+        }
 
         lanceurFestivalsDetails =
             registerForActivityResult(
@@ -258,17 +268,31 @@ public class Festivals extends AppCompatActivity implements
 
             // Si l'étoile est active, on la désactive
             if (boutonFavori.getDrawable().getConstantState().equals(etoileActive)) {
-                message = String.format(FESTIVAL_RETIRE, idFestivalClique);
                 boutonFavori.setImageResource(R.drawable.etoile_inactive);
+                message = String.format(FESTIVAL_RETIRE, idFestivalClique);
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
                 ApiManager.appelApiSansReponse(urlSupprimerFavori,this, donnees, Request.Method.POST);
+
+                retirerFavori(position, typeFestivals.equals(TYPE_FESTIVALS.FAVORIS));
             } else {
-                message = String.format(FESTIVAL_AJOUTE, idFestivalClique);
                 boutonFavori.setImageResource(R.drawable.etoile_active);
+                message = String.format(FESTIVAL_AJOUTE, idFestivalClique);
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
                 ApiManager.appelApiSansReponse(urlAjouterFavori,this, donnees, Request.Method.POST);
+
+                ajouterFavori(position);
+            }
+
+            // Si la page est celle des favoris, on la réaffiche
+            if (typeFestivals.equals(TYPE_FESTIVALS.FAVORIS)) {
+                adaptateur.notifyDataSetChanged();
+                if (festivalsStockes.size() > 0) {
+                    afficherPage();
+                } else {
+                    afficherMessageErreur(AUCUN_FESTIVAL_FAVORI);
+                }
             }
         } catch (JSONException e) {
             Toast.makeText(this, "Une erreur est survenue",
@@ -280,8 +304,16 @@ public class Festivals extends AppCompatActivity implements
      * Rend faux l'attribut "favori" d'un festival.
      * @param positionFestival La position du festival dans la liste.
      */
-    private void retirerFavori(int positionFestival) {
+    private void retirerFavori(int positionFestival, boolean pageFavoris) {
+        int position;
+
         listeFestivals.get(positionFestival).setFavori(false);
+
+        if (pageFavoris) {
+            position = (page - 1) * 2 + positionFestival;
+            festivalsStockes.remove(position);
+            listeFestivals.remove(positionFestival);
+        }
     }
 
     /**
@@ -330,6 +362,15 @@ public class Festivals extends AppCompatActivity implements
                                                      idFestival, favoris, dateDeb,
                                                      dateFin,description));
             }
+
+            boutons.setVisibility(festivalsStockes.size() > NOMBRE_FESTIVAL_PAGE
+                                  ? View.VISIBLE
+                                  : View.GONE);
+
+            boutonPrecedent.setVisibility(page > 1 ? View.VISIBLE : View.GONE);
+            boutonSuivant.setVisibility(page < (int) Math.ceil((float) festivalsStockes.size() / NOMBRE_FESTIVAL_PAGE)
+                                      ? View.VISIBLE
+                                      : View.GONE);
         } catch (JSONException e) { System.err.println(e);}
     }
 

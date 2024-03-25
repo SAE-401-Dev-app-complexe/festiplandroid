@@ -3,23 +3,17 @@ package sae401.festiplandroid;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.PixelCopy;
 import android.view.View;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import static sae401.festiplandroid.Festivals.CLE_TYPE_FESTIVAL;
+import static sae401.festiplandroid.Festivals.TYPE_FESTIVALS;
 
 public class DetailsFestival extends AppCompatActivity  {
 
@@ -113,7 +107,7 @@ public class DetailsFestival extends AppCompatActivity  {
         if (optionChoisie == R.id.festivals_programmes) {
             chargerFestivalsProgrammes();
         } else if (optionChoisie == R.id.festivals_favoris) {
-            chargerFestivalsProgrammes();
+            chargerFestivalsFavoris();
         } else if (optionChoisie == R.id.deconnexion) {
             ApiManager.setCleApi(null);
             deconnecter();
@@ -129,7 +123,20 @@ public class DetailsFestival extends AppCompatActivity  {
     private void chargerFestivalsProgrammes() {
         Intent pageFestivalsProgrammes = new Intent(this, Festivals.class);
 
+        pageFestivalsProgrammes.putExtra(CLE_TYPE_FESTIVAL, TYPE_FESTIVALS.PROGRAMMES);
+
         startActivity(pageFestivalsProgrammes);
+    }
+
+    /**
+     * Charge la page des festivals favoris.
+     */
+    private void chargerFestivalsFavoris() {
+        Intent pageFestivalsFavoris = new Intent(this, Festivals.class);
+
+        pageFestivalsFavoris.putExtra(CLE_TYPE_FESTIVAL, TYPE_FESTIVALS.FAVORIS);
+
+        startActivity(pageFestivalsFavoris);
     }
 
     /**
@@ -141,7 +148,11 @@ public class DetailsFestival extends AppCompatActivity  {
         // TODO faire en sorte qu'on ne puisse plus faire retour (via bouton tel) après la déconnexion
     }
 
-    public void retour(View v) {
+    /**
+     * Retourne à la page précédente.
+     * @param vue La vue actuelle
+     */
+    public void retour(View vue) {
         Intent retour = new Intent(this, Festivals.class);
         setResult(Activity.RESULT_OK, retour);
         finish();
