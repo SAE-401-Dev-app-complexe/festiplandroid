@@ -28,7 +28,14 @@ import com.android.volley.Request;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+/**
+ * Affichage des détails d'un festival
+ *
+ * @author Enzo  Cluzel
+ * @author Lucas Descriaud
+ * @author Loïc  Faugières
+ * @author Simon Guiraud
+ */
 public class DetailsFestival extends AppCompatActivity  {
 
     private String urlDetailsFestival;
