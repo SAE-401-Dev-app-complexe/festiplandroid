@@ -1,3 +1,7 @@
+/*
+ * DetailsFestival.java                                        26 mar. 2024
+ * IUT de Rodez, pas de copyright ni de "copyleft".
+ */
 package sae401.festiplandroid;
 
 import androidx.appcompat.app.ActionBar;
