@@ -47,7 +47,7 @@
     </TableRow>
 
     <TableRow
-        android:layout_marginLeft="@dimen/details_marge_cotes"
+        android:layout_marginStart="@dimen/details_marge_cotes"
         android:layout_marginBottom="@dimen/details_marge_paragraphe_description">
 
         <TextView
@@ -59,21 +59,19 @@
             android:text="@string/details_description"/>
     </TableRow>
 
-    <TableRow
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/details_marge_cotes"
-        android:layout_marginBottom="@dimen/details_marge_lignes">
-
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:text="@string/details_description_defaut" />
-    </TableRow>
+        android:layout_marginRight="@dimen/details_marge_cotes"
+        android:layout_marginBottom="@dimen/details_marge_lignes"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:text="@string/details_description_defaut" />
 
     <TableRow
-        android:layout_marginLeft="@dimen/details_marge_cotes"
+        android:layout_marginStart="@dimen/details_marge_cotes"
         android:layout_marginBottom="@dimen/details_marge_paragraphe_liste">
         <TextView
             android:layout_width="wrap_content"
@@ -90,7 +88,6 @@
         android:layout_height="@dimen/hauteur_liste_spectacles"
         android:layout_marginLeft="@dimen/details_marge_cotes"
         android:layout_marginRight="@dimen/details_marge_cotes"
-        android:layout_span="2"
-        android:layout_marginBottom="@dimen/details_marge_lignes"/>
+        android:layout_marginBottom="@dimen/details_marge_lignes" />
 
 </TableLayout>

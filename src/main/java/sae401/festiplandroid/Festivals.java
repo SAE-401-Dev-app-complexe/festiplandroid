@@ -481,6 +481,7 @@ public class Festivals extends AppCompatActivity {
             try {
                 Picasso.get().load(festival.getIllustration()).into(illustration);
             } catch (Exception e) {
+                e.printStackTrace();
                 illustration.setImageResource(R.drawable.default_illustration);
             }
         } else {
