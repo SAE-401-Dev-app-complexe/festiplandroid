@@ -19,11 +19,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -387,6 +389,12 @@ public class Festivals extends AppCompatActivity {
                 int idFestival = festivalJson.getInt("idFestival");
                 String titre = festivalJson.getString("titre");
                 String description = festivalJson.getString("description");
+                String illustration;
+                try {
+                    illustration = festivalJson.getString("illustration");
+                } catch (Exception e) {
+                    illustration = null;
+                }
                 String dateDeb = festivalJson.getString("dateDebut");
                 String dateFin = festivalJson.getString("dateFin");
 
@@ -401,7 +409,7 @@ public class Festivals extends AppCompatActivity {
                     favoris = true;
                 }
 
-                listeFestivals.add(new InfosFestival(titre, R.drawable.default_illustration,
+                listeFestivals.add(new InfosFestival(titre, illustration,
                                                      idFestival, favoris, dateDeb,
                                                      dateFin, description));
             }
@@ -462,6 +470,22 @@ public class Festivals extends AppCompatActivity {
                 afficherMessageErreur(erreur);
             }
         }, null, Request.Method.GET);
+    }
+
+    /**
+     * Charge une image depuis une URL et l'associe à une image.
+     * @param festival Le festival dont on veut l'illustration.
+     */
+    public static void setImageViewSource(InfosFestival festival, ImageView illustration) {
+        if (festival.getIllustration() != null) {
+            try {
+                Picasso.get().load(festival.getIllustration()).into(illustration);
+            } catch (Exception e) {
+                illustration.setImageResource(R.drawable.default_illustration);
+            }
+        } else {
+            illustration.setImageResource(R.drawable.default_illustration);
+        }
     }
 
     /**
