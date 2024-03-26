@@ -89,7 +89,7 @@ public class ApiManager {
                 public Map<String, String> getHeaders() {
                     Map<String, String> params = new HashMap<String, String>();
                     if (cleApi != null)
-                        params.put("APIKEY", "cleApiPrivee");// TODO modifier cleApi);
+                        params.put("APIKEY", cleApi);
                     return params;
                 }
             };
@@ -163,7 +163,7 @@ public class ApiManager {
             ) {
                 @Override
                 public Map<String, String> getHeaders() {
-                    Map<String, String> params = new HashMap<String, String>();
+                    Map<String, String> params = new HashMap<>();
                     if (cleApi != null)
                         params.put("APIKEY", cleApi);
                     return params;
