@@ -24,5 +24,12 @@
 
     <string name="festivals_chargement_donnees">Chargement des festivals</string>
 
+    <string name="details_titre_defaut">Titre du festival par défaut :</string>
+    <string name="details_dates_defaut">Du XX/XX/XXXX\nau XX/XX/XXXX</string>
+    <string name="details_description">Description :</string>
+    <string name="details_description_defaut">Description par défaut du festival</string>
+    <string name="details_liste_spectacles">Liste des spectacles programmés :</string>
+    <string name="details_aucun_spectacle">Aucun spectacle n\'est programmé dans ce festival.</string>
+
     <string name="erreur_survenue">Une erreur est survenue</string>
 </resources>

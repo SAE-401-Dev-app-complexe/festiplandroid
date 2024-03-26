@@ -6,6 +6,11 @@
     <dimen name="marge_inputs">15dp</dimen>
     <dimen name="padding_placeholder_inputs">12dp</dimen>
     <dimen name="marge_bouton">50dp</dimen>
+    <dimen name="details_marge_lignes">26dp</dimen>
+    <dimen name="details_marge_sous_image">15dp</dimen>
+    <dimen name="details_marge_cotes">80dp</dimen>
+    <dimen name="details_marge_paragraphe_description">5dp</dimen>
+    <dimen name="details_marge_paragraphe_liste">17dp</dimen>
 
     <!-- TEXTES -->
     <dimen name="connexion_texte_input">20sp</dimen>
@@ -15,4 +20,5 @@
     <!-- TAILLES -->
     <dimen name="connexion_arrondi_champs">8dp</dimen>
     <dimen name="connexion_largeur_champs">50dp</dimen>
+    <dimen name="hauteur_liste_spectacles">150dp</dimen>
 </resources>

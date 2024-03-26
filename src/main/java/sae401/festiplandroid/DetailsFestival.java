@@ -4,18 +4,20 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import static sae401.festiplandroid.Festivals.CLE_TYPE_FESTIVAL;
 import static sae401.festiplandroid.Festivals.TYPE_FESTIVALS;
+import static sae401.festiplandroid.Festivals.setImageViewSource;
 
 import com.android.volley.Request;
 
@@ -37,7 +39,11 @@ public class DetailsFestival extends AppCompatActivity  {
 
     private TextView description;
 
-    private TextView[] spectacles;
+    private ImageView illustration;
+
+    private ListView listeSpectacles;
+
+    private ArrayAdapter<String> adapteurListe;
 
     /**
      * Appelé lors de la création de l'activité.
@@ -64,6 +70,11 @@ public class DetailsFestival extends AppCompatActivity  {
         titre = findViewById(R.id.titre_festival);
         dates = findViewById(R.id.dates_festival);
         description = findViewById(R.id.description);
+        illustration = findViewById(R.id.illustration);
+        listeSpectacles = findViewById(R.id.liste_spectacles);
+
+        adapteurListe = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        listeSpectacles.setAdapter(adapteurListe);
 
         Intent pagePrecedente = getIntent();
 
@@ -72,9 +83,13 @@ public class DetailsFestival extends AppCompatActivity  {
 
             idFestival = festival.getIdFestival();
             titre.setText(festival.getTitre());
-            dates.setText("Du " + festival.getDateDeb() + " au " + festival.getDateFin());
+            dates.setText("Du " + festival.getDateDeb() + "\nau " + festival.getDateFin());
             description.setText(festival.getDescription());
+
+            setImageViewSource(festival, illustration);
+            chargerSpectaclesFestival();
         } catch (Exception e) {
+            e.printStackTrace();
             afficherMessageErreur(null);
         }
     }
@@ -123,6 +138,8 @@ public class DetailsFestival extends AppCompatActivity  {
         startActivity(pageFestivals);
     }
 
+
+
     /**
      * Déconnecte l'utilisateur et le redirige vers la page de connexion.
      */
@@ -133,9 +150,9 @@ public class DetailsFestival extends AppCompatActivity  {
     }
 
     /**
-     * Charge les détails du festival et les affiche.
+     * Charge les spectacles du festival et les affiche dans la liste.
      */
-    private void chargerDetailsFestival() {
+    private void chargerSpectaclesFestival() {
         JSONArray donnees;
 
         donnees = new JSONArray();
@@ -149,11 +166,19 @@ public class DetailsFestival extends AppCompatActivity  {
                                  new CallbackApi<JSONArray>() {
             @Override
             public void onReponsePositive(JSONArray reponseApi) {
-                // TODO afficher données
-
                 try {
-                    JSONArray spectacles = reponseApi.getJSONArray(0);
+                    if (reponseApi.length() > 0) {
+                        for (int i = 0; i < reponseApi.length(); i++) {
+                            JSONObject spectacle = reponseApi.getJSONObject(i);
+                            adapteurListe.add(spectacle.getString("titre")
+                                + " - " + spectacle.getString("duree")
+                                + "\n" + spectacle.getString("description"));
+                        }
+                    } else {
+                        adapteurListe.add(getString(R.string.details_aucun_spectacle));
+                    }
                 } catch (JSONException e) {
+                    e.printStackTrace();
                     afficherMessageErreur(null);
                 }
             }
@@ -162,7 +187,7 @@ public class DetailsFestival extends AppCompatActivity  {
             public void onReponseErreur(String erreur) {
                 afficherMessageErreur(erreur);
             }
-        }, donnees, Request.Method.GET);
+        }, donnees, Request.Method.POST);
     }
 
     /**

@@ -28,8 +28,8 @@ public class InfosFestival implements Serializable {
     /** Description du festival */
     private String description;
 
-    /** Lien de l'illustration ou identifiant de celle par défaut */
-    private int illustration;
+    /** Lien de l'illustration */
+    private String illustration;
 
     /** Festival favori par rapport à l'utilisateur */
     private boolean favori;
@@ -44,7 +44,7 @@ public class InfosFestival implements Serializable {
      * Festival caractérisé par son titre, son illustration, son identifiant,
      * sa date de début, sa date de fin et sa description.
      */
-    public InfosFestival(String titre, int illustration, int idFestival, boolean favori,
+    public InfosFestival(String titre, String illustration, int idFestival, boolean favori,
                          String dateDeb, String dateFin, String description) {
         this.titre = titre;
         this.illustration = illustration;
@@ -63,11 +63,14 @@ public class InfosFestival implements Serializable {
     }
 
     /**
-     * Renvoie l'identifiant de l'illustration du festival
-     * @return un entier contenant l'identifiant du festival
+     * Renvoie l'url de l'illustration du festival
+     * @return une chaîne correspondant à l'url de l'illustration
      */
-    public int getIllustration() {
-        return illustration;
+    public String getIllustration() {
+        if (illustration != null && !illustration.equals("null"))
+            return illustration;
+        else
+            return null;
     }
 
     /**

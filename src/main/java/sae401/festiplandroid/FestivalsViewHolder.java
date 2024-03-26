@@ -4,6 +4,8 @@
  */
 package sae401.festiplandroid;
 
+import com.squareup.picasso.Picasso;
+
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageButton;
@@ -12,6 +14,8 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.net.URL;
 
 /**
  * Description du contenant des items de la liste de type RecyclerView
@@ -63,20 +67,19 @@ public class FestivalsViewHolder extends RecyclerView.ViewHolder {
      * @param festival l'instance qui doit être affichée
      */
     public void bind(InfosFestival festival) {
+        Drawable image;
+
         titre.setText(festival.getTitre());
-        illustration.setImageResource(festival.getIllustration());
+        Festivals.setImageViewSource(festival, illustration);
 
         if (festival.isFavori()) {
-            Drawable image
-                = ContextCompat.getDrawable(itemView.getContext(),
-                                            R.drawable.etoile_active);
-            boutonFavori.setImageDrawable(image);
+            image = ContextCompat.getDrawable(itemView.getContext(),
+                    R.drawable.etoile_active);
         } else {
-            Drawable image
-                = ContextCompat.getDrawable(itemView.getContext(),
-                                            R.drawable.etoile_inactive);
-            boutonFavori.setImageDrawable(image);
+            image = ContextCompat.getDrawable(itemView.getContext(),
+                    R.drawable.etoile_inactive);
         }
+        boutonFavori.setImageDrawable(image);
 
         dates.setText("Du " + festival.getDateDeb()
                       + "\nau " + festival.getDateFin());
