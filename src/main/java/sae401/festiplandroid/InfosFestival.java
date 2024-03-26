@@ -98,8 +98,8 @@ public class InfosFestival implements Serializable {
      * Renvoie la description du festival
      * @return une chaîne correspondant à la description
      */
-    public int getDescription() {
-        return idFestival;
+    public String getDescription() {
+        return description;
     }
 
     /**
