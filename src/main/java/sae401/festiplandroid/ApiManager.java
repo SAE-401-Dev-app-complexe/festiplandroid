@@ -245,11 +245,4 @@ public class ApiManager {
         ApiManager.cleApi = cleApi;
     }
 
-    /**
-     * Permet d'obtenir la clé Api de l'utilisateur connectée
-     * @return la clé API
-     */
-    public static String getCle() {
-        return cleApi;
-    }
 }
