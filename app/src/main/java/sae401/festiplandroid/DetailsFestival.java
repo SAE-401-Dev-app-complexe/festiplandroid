@@ -147,6 +147,7 @@ public class DetailsFestival extends AppCompatActivity  {
         pageFestivals.putExtra(CLE_TYPE_FESTIVAL, typeFestivals);
 
         startActivity(pageFestivals);
+        finish();
     }
 
 
@@ -158,6 +159,7 @@ public class DetailsFestival extends AppCompatActivity  {
         ApiManager.setCleApi(null);
         Intent pageConnexion = new Intent(this, Connexion.class);
         startActivity(pageConnexion);
+        finish();
     }
 
     /**

@@ -135,6 +135,7 @@ public class Connexion extends AppCompatActivity {
         pageFestivals.putExtra(CLE_TYPE_FESTIVAL, TYPE_FESTIVALS.PROGRAMMES);
 
         startActivity(pageFestivals);
+        finish();
     }
 
     /**
